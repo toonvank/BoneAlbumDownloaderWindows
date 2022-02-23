@@ -417,13 +417,13 @@ namespace BoneAlbumDownloader
 		public MainWindow()
         {
             InitializeComponent();
-			this.Cursor = new Cursor(@"C:\Users\Toon Van Kimmenade\Documents\PXL\C#\BoneAlbumDownloader\BoneAlbumDownloader\Pics\cursor2.cur");
+			this.Cursor = new Cursor(@"C:\Users\Toon Van Kimmenade\Downloads\BoneAlbumDownloader\BoneAlbumDownloader\Pics\cursor2.cur");
 			downloading.Visibility = Visibility.Hidden;
 			for (int i = 0; i < 48; i++)
             {
                 cmbAlbum.Items.Add(albums[i, 0]);
             }
-			player = new SoundPlayer("C:/Users/Toon Van Kimmenade/Documents/PXL/C#/BoneAlbumDownloader/BoneAlbumDownloader/Music/song1.wav");
+			player = new SoundPlayer("C:/Users/Toon Van Kimmenade/Downloads/BoneAlbumDownloader/BoneAlbumDownloader/Music/song1.wav");
 			player.LoadCompleted += delegate (object sender, AsyncCompletedEventArgs e) {
 				player.Play();
 			};
@@ -503,20 +503,20 @@ namespace BoneAlbumDownloader
 			string cursor = Microsoft.VisualBasic.Interaction.InputBox($"Answers: seshcrown[w]hite, seshcrown[b]lack, [e]ddy, [s]tandard\nPlease enter the highlighted letter.", "File directory input");
 			if (cursor == "w" || cursor == "seshcrownwhite")
             {
-				this.Cursor = new Cursor(@"C:\Users\Toon Van Kimmenade\Documents\PXL\C#\BoneAlbumDownloader\BoneAlbumDownloader\Pics\sesh1.cur");
+				this.Cursor = new Cursor(@"C:\Users\Toon Van Kimmenade\Downloads\BoneAlbumDownloader\BoneAlbumDownloader\Pics\sesh1.cur");
 			}
 			if (cursor == "b" || cursor == "seshcrownblack")
 			{
-				this.Cursor = new Cursor(@"C:\Users\Toon Van Kimmenade\Documents\PXL\C#\BoneAlbumDownloader\BoneAlbumDownloader\Pics\sesh2.cur");
+				this.Cursor = new Cursor(@"C:\Users\Toon Van Kimmenade\Downloads\BoneAlbumDownloader\BoneAlbumDownloader\Pics\sesh2.cur");
 			}
 			else if (cursor == "e" || cursor == "eddy")
 			{
-				this.Cursor = new Cursor(@"C:\Users\Toon Van Kimmenade\Documents\PXL\C#\BoneAlbumDownloader\BoneAlbumDownloader\Pics\ed.cur");
+				this.Cursor = new Cursor(@"C:\Users\Toon Van Kimmenade\Downloads\BoneAlbumDownloader\BoneAlbumDownloader\Pics\ed.cur");
 
 			}
 			else if (cursor == "s" || cursor == "standard")
 			{
-				this.Cursor = new Cursor(@"C:\Users\Toon Van Kimmenade\Documents\PXL\C#\BoneAlbumDownloader\BoneAlbumDownloader\Pics\cursor2.cur");
+				this.Cursor = new Cursor(@"C:\Users\Toon Van Kimmenade\Downloads\BoneAlbumDownloader\BoneAlbumDownloader\Pics\cursor2.cur");
 			}
 		}
 
@@ -542,7 +542,7 @@ namespace BoneAlbumDownloader
             else
             {
 				player.Stop();
-				player2 = new SoundPlayer("C:/Users/Toon Van Kimmenade/Documents/PXL/C#/BoneAlbumDownloader/BoneAlbumDownloader/Music/song2.wav");
+				player2 = new SoundPlayer("C:/Users/Toon Van Kimmenade/Downloads/BoneAlbumDownloader/BoneAlbumDownloader/Music/song2.wav");
 				player2.LoadCompleted += delegate (object sender2, AsyncCompletedEventArgs f) {
 					player2.Play();
 				};
