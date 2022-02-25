@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -420,6 +420,7 @@ namespace BoneAlbumDownloader
             InitializeComponent();
 			this.Cursor = new Cursor(System.IO.Path.Combine(Environment.CurrentDirectory, @"Pics\", "cursor2.cur"));
 			downloading.Visibility = Visibility.Hidden;
+			prgProgress.Visibility = Visibility.Hidden;
 			for (int i = 0; i < 48; i++)
             {
                 cmbAlbum.Items.Add(albums[i, 0]);
@@ -430,17 +431,34 @@ namespace BoneAlbumDownloader
 			};
 			player.LoadAsync();
 		}
+
+
 		private void IsDone(string download, string albumnaam)
         {
-			answer = Microsoft.VisualBasic.Interaction.InputBox($"Please input the direct file path from file explorer. You can find it by clicking in top bar or through the properties window. Make sure to add an extra backslash to the file path or it will not work.\nDownloads is by default c>>users>yourusername.", "File directory input");
-			FileDownloader fileDownloader = new FileDownloader();
-			downloading.Visibility = Visibility.Visible;
-			downloading.Content = "Downloading";
-			savePathOutput = $@"{ answer}{albumnaam}.rar";
-			fileDownloader.DownloadProgressChanged += (sender, e) => downloading.Content = "Progress changed " + e.BytesReceived + " " + e.TotalBytesToReceive;
-			fileDownloader.DownloadFileCompleted += (sender, b) => downloading.Content = $"Download completed to \n{savePathOutput}";
-			//fileDownloader.DownloadFileAsync($"{download}", $@"{savePath}");
-			fileDownloader.DownloadFileAsync($"{download}", savePathOutput);
+			// Configure save file dialog box
+			var dialog = new Microsoft.Win32.SaveFileDialog();
+			dialog.FileName = albumnaam; // Default file name
+			dialog.DefaultExt = ".rar"; // Default file extension
+			dialog.Filter = "Rar files (.zip)|*.rar"; // Filter files by extension
+
+			// Show save file dialog box
+			bool? result = dialog.ShowDialog();
+
+			// Process save file dialog box results
+			if (result == true)
+			{
+				// Save document
+				string filename = dialog.FileName;
+				FileDownloader fileDownloader = new FileDownloader();
+				downloading.Visibility = Visibility.Visible;
+				prgProgress.Visibility = Visibility.Visible;
+				downloading.Content = "Download started";
+				//fileDownloader.DownloadProgressChanged += (sender, e) => downloading.Content = "Progress changed " + e.BytesReceived + " " + e.TotalBytesToReceive;
+				fileDownloader.DownloadProgressChanged += (sender, e) => prgProgress.Maximum = e.TotalBytesToReceive;
+				fileDownloader.DownloadProgressChanged += (sender, e) => prgProgress.Value = e.BytesReceived;
+				fileDownloader.DownloadFileCompleted += (sender, b) => downloading.Content = $"Download completed to \n{filename}";
+				fileDownloader.DownloadFileAsync($"{download}", filename);
+			}
 		}
 
         private void clickClip_Click(object sender, RoutedEventArgs e)
@@ -547,11 +565,6 @@ namespace BoneAlbumDownloader
 				ispressed = true;
 			}
 			
-		}
-
-        private void changeDownload_Click(object sender, RoutedEventArgs e)
-        {
-			answer = Microsoft.VisualBasic.Interaction.InputBox($"Please input the direct file path from file explorer. You can find it by clicking in top bar or through the properties window. Make sure to add an extra backslash to the file path or it will not work.\nDownloads is by default c>>users>yourusername.", "File directory input");
 		}
 
         private void cmbAlbum_SelectionChanged(object sender, SelectionChangedEventArgs e)
