@@ -30,70 +30,70 @@ namespace BoneAlbumDownloader
     public partial class MainWindow : Window
     {
 		string savePathOutput, album, answer, username;
-		bool customAnswer, ispressed = false;
+		bool ispressed = false;
 		SoundPlayer player, player2;
 		int i = 0;
 
 
 		private string[,] albums = { 
-        { "BONES", "2012", "/Cover/1.jpg", "https://drive.google.com/uc?id=126GrRm0y7Ti63C9LYIhIjlE5TLCpZx9t&export=download"}, 
+        { "BONES", "2012", "/Cover/1.jpg", "https://drive.google.com/uc?export=download&id=11zHwGe5fZZV8rkyRTX023L6FUHKc0k5g&confirm=t"}, 
         { "TYPICALRAPSHIT", "2012", "/Cover/2.jpg", "https://drive.google.com/uc?id=11LIoQ11Mk7jSR-X41Mx2-pXrwrNYixnh&export=download"}, 
-        { "1MILLIONBLUNTS", "2012", "/Cover/3.jpg", "https://drive.google.com/uc?id=11zy9GDteCVgQarq2ZG6EfUIUjrV00-Jv&export=download"},
-        { "SCUMBAG", "2013", "/Cover/4.jpg", "https://drive.google.com/uc?id=10no2l2fDCxeu86BOr8eapEiXTl2amVLf&export=download"} ,
-        { "PAIDPROGRAMMING", "2013", "/Cover/5.jpg", "https://drive.google.com/uc?id=10Jh876-hhPz3sMSH3rrr62EbG-XrKizc&export=download"} ,
-        { "LIVINGLEGEND", "2013", "/Cover/6.jpg", "https://drive.google.com/uc?id=1-yT0RIWOp6zJRYQLi50fhvsk7JtoetAG&export=download"} ,
-        { "LAME", "2013", "/Cover/7.jpg", "https://drive.google.com/uc?id=12cSqtYaedKsMUl5rq3KwvTqpLoDWUtTw&export=download"} ,
-        { "TEENAGER", "2013", "/Cover/8.jpg", "https://drive.google.com/uc?id=11GIGDb_bEvFpnZRTLhMEdy0OJ_yqFyWG&export=download"} ,
-        { "SATURN", "2013", "/Cover/9.jpg", "https://drive.google.com/uc?id=10fQzsgdmU5C0YbcdmZz9vSW-9PXSiBC6&export=download"} ,
-        { "CREEP", "2013", "/Cover/10.jpg", "https://drive.google.com/uc?id=1-DdgiUVfGEnG59kNmkkis0h7gBxuQsmE&export=download"} ,
-        { "CRACKER", "2013", "/Cover/11.jpg", "https://drive.google.com/uc?id=1-CNIbcNxAd4o6sORm2Pgq7RJ13W3mJ8Q&export=download"} ,
-        { "DEADBOY", "2014", "/Cover/12.jpg", "https://drive.google.com/uc?id=1-JLf98NWr2Jfxsakq_UCD3-DBZ7NgUz-&export=download"} ,
-        { "TEENWITCH", "2014", "/Cover/13.jpg", "https://drive.google.com/uc?id=11HMwwKGuU3Zy-lrtME8fX4mk7w6ImIRW&export=download"} ,
-        { "SKINNY", "2014", "/Cover/14.jpg", "https://drive.google.com/uc?id=10z8O0AdnRimbpxOwgkWguqOY24Du1mqu&export=download"} ,
-        { "ROTTEN", "2014", "/Cover/15.jpg", "https://drive.google.com/uc?id=10cdFaTpFynEjlMPFIrhz5q8Vqx446f5r&export=download"} ,
-        { "GARBAGE", "2014", "/Cover/16.jpg", "https://drive.google.com/uc?id=1-ciHqb4oij0HRoTOdosCCt5Y3MpXk8Aq&export=download"} ,
-        { "HERMITOFEASTGRANDRIVER", "2015", "/Cover/17.jpg", "https://drive.google.com/uc?id=1-l6666xVyNvaV30YgttmgRg_xO5cBQI3&export=download"} ,
-        { "YOUSHOULDHAVESEENYOURFACE", "2015", "/Cover/47.jpg", "https://drive.google.com/uc?id=11z9USy117ihV1huweh4g-jfQedDQ2Rqt&export=download"} ,
-        { "BANSHEE", "2015", "/Cover/18.jpg", "https://drive.google.com/uc?id=1txmYPuYxNsSTQgKGO9J0gMi7rcw577O7&export=download"} ,
-        { "KICKINGTHEBUCKET", "2015", "/Cover/50.jpg", "https://drive.google.com/uc?id=124aam0nUQHNn_eNPIxs0E1YI7WuZlu0E&export=download"} ,
-        { "POWDER", "2015", "/Cover/19.jpg", "https://drive.google.com/uc?id=10c2rkj6jJxIy_wtDIKeLBNqH-Oxf-yJW&export=download"} ,
-        { "FRAYED", "2015", "/Cover/20.jpg", "https://drive.google.com/uc?id=1-UjDfFHcCUlI4k0LzfBBz9HtuMpkz5sh&export=download"} ,
-        { "GOODFORNOTHING", "2016", "/Cover/21.jpg", "https://drive.google.com/uc?id=1-dSfY0rJSdj2U4a-geJXWxoNcYv_HmZx&export=download"} ,
-        { "PAIDPROGRAMMING2", "2016", "/Cover/22.jpg", "https://drive.google.com/uc?id=10KzHHys_gzJrcX7JxicsLBF4RuRwOUkY&export=download"} ,
-        { "SOFWAREUPDATE1.0", "2016", "/Cover/23.jpg", "https://drive.google.com/uc?id=1102AZyrSiixDd2ftrauUpNp4ZPvlGmeF&export=download"} ,
-        { "USELESS", "2016", "/Cover/24.jpg", "https://drive.google.com/uc?id=11dx1NTLTH-DTig0VDJGqgl93Od97aUtQ&export=download"} ,
-        { "CARCASS", "2017", "/Cover/25.jpg", "https://drive.google.com/uc?id=1-A3HUUrbRCPmgKjaMwGlBnrjnW52eAbO&export=download"} ,
-        { "FAILURE", "2017", "/Cover/26.jpg", "https://drive.google.com/uc?id=1-UYJ3XiLNN4xFjKE7ED9xoq7nXaQrQeb&export=download"} ,
-        { "DISGRACE", "2017", "/Cover/27.jpg", "https://drive.google.com/uc?id=1-SlFfFEKIfUXWUKirpCjP15zylPDQ6i0&export=download"} ,
-        { "UNRENDERED", "2017", "/Cover/28.jpg", "https://drive.google.com/uc?id=11di90rq18bI8uRc_9IhZjZOVf2eBM21C&export=download"} ,
-        { "NOREDEEMINGQUALITIES", "2017", "/Cover/29.jpg", "https://drive.google.com/uc?id=10DBwnstTRV3Kwoz7OlJgs6qWXlNB6Pjy&export=download"} ,
-        { "LIVINGSUCKS", "2018", "/Cover/30.jpg", "https://drive.google.com/uc?id=105V_VZf0y-KhUkjAaC6XBWnZ3wi9p_c8&export=download"} ,
-        { "THEMANINTHERADIATOR", "2018", "/Cover/31.jpg", "https://drive.google.com/uc?id=11JiPQgsRXVfTwQEszJAJ4ZWTWr8rs5tV&export=download"} ,
-        { "PERMANENTFROWN", "2018", "/Cover/32.jpg", "https://drive.google.com/uc?id=10RnLg1xfaRBP9LjB5hJx09VKbVdIgvQO&export=download"} ,
-        { "AUGMENTED", "2018", "/Cover/33.jpg", "https://drive.google.com/uc?id=12smlbW8uHGko-32OC8SHvHhNZpMCd1iw&export=download"} ,
-        { "UNDERTHEWILLOWTREE", "2019", "/Cover/34.jpg", "https://drive.google.com/uc?id=11XJW78UqhxuqHYaFUR1NUrs7HhLPSHG_&export=download"} ,
-        { "SPARROWSCREEK", "2019", "/Cover/35.jpg", "https://drive.google.com/uc?id=12lQoA4qZXSy6CxNCVNoaq9HIOeN62288&export=download"} ,
-        { "IFEELLIKEDIRT", "2019", "/Cover/36.jpg", "https://drive.google.com/uc?id=1-meyzQloPBix4zdQxVWexai4cBFRxitz&export=download"} ,
-        { "OFFLINE", "2020", "/Cover/37.jpg", "https://drive.google.com/uc?id=10Fn8EiNaruikO0VFxolgQpsa79FRXm0t&export=download"} ,
-        { "BRACE", "2020", "/Cover/39.jpg", "https://drive.google.com/uc?id=12QL9R4yreUt1d78AoOCOAzRQYgJVtw6Z&export=download"} ,
-        { "REMAINS", "2020", "/Cover/40.jpg", "https://drive.google.com/uc?id=10c9URRnYOgorgk_rLndV9va_y7ZXcyHG&export=download"} ,
-        { "FROMBEYONDTHEGRAVE", "2020", "/Cover/41.jpg", "https://drive.google.com/uc?id=1-YAMYz2eJ_d8mttudNO4EpMUFuXHyv2A&export=download"} ,
-        { "DAMAGEDGOODS", "2020", "/Cover/42.jpg", "https://drive.google.com/uc?id=1-EdojsDkYfomktHkwqt_KyCsrvb9NO9g&export=download"} ,
-        { "PUSHINGUPDAISIES", "2021", "/Cover/43.jpg", "https://drive.google.com/uc?id=10c7gdO4hEE2NQHMwFU3EYy1HUrVmrvpM&export=download"} ,
-        { "FORBIDDENIMAGE", "2021", "/Cover/44.jpg", "https://drive.google.com/uc?id=12tpykjukI0wmJs1RQmS_cczD00ScJZO9&export=download"} ,
-        { "INLOVINGMEMORY", "2021", "/Cover/45.jpg", "https://drive.google.com/uc?id=1-ncB6j_07q3W_OzTAjqImnSF3H6aOaEl&export=download"} ,
-        { "BURDEN", "2021", "/Cover/46.jpg", "https://drive.google.com/uc?id=12C_efxglApaRJ7SzHVg2q33_vsPazfc3&export=download"} ,
-        { "SCRAPS", "2021", "/Cover/scraps.jpeg", "https://drive.google.com/uc?id=10g2e6qRDSTklScbV-wExA_E0_gkGZvBK&export=download"} ,
+        { "1MILLIONBLUNTS", "2012", "/Cover/3.jpg", "https://drive.google.com/uc?id=11zy9GDteCVgQarq2ZG6EfUIUjrV00-Jv&export=download&confirm=t"},
+        { "SCUMBAG", "2013", "/Cover/4.jpg", "https://drive.google.com/uc?id=10no2l2fDCxeu86BOr8eapEiXTl2amVLf&export=download&confirm=t"} ,
+        { "PAIDPROGRAMMING", "2013", "/Cover/5.jpg", "https://drive.google.com/uc?id=10Jh876-hhPz3sMSH3rrr62EbG-XrKizc&export=download&confirm=t"} ,
+        { "LIVINGLEGEND", "2013", "/Cover/6.jpg", "https://drive.google.com/uc?id=1-yT0RIWOp6zJRYQLi50fhvsk7JtoetAG&export=download&confirm=t"} ,
+        { "LAME", "2013", "/Cover/7.jpg", "https://drive.google.com/uc?id=12cSqtYaedKsMUl5rq3KwvTqpLoDWUtTw&export=download&confirm=t"} ,
+        { "TEENAGER", "2013", "/Cover/8.jpg", "https://drive.google.com/uc?id=11GIGDb_bEvFpnZRTLhMEdy0OJ_yqFyWG&export=download&confirm=t"} ,
+        { "SATURN", "2013", "/Cover/9.jpg", "https://drive.google.com/uc?id=10fQzsgdmU5C0YbcdmZz9vSW-9PXSiBC6&export=download&confirm=t"} ,
+        { "CREEP", "2013", "/Cover/10.jpg", "https://drive.google.com/uc?id=1-DdgiUVfGEnG59kNmkkis0h7gBxuQsmE&export=download&confirm=t"} ,
+        { "CRACKER", "2013", "/Cover/11.jpg", "https://drive.google.com/uc?id=1-CNIbcNxAd4o6sORm2Pgq7RJ13W3mJ8Q&export=download&confirm=t"} ,
+        { "DEADBOY", "2014", "/Cover/12.jpg", "https://drive.google.com/uc?id=1-JLf98NWr2Jfxsakq_UCD3-DBZ7NgUz-&export=download&confirm=t"} ,
+        { "TEENWITCH", "2014", "/Cover/13.jpg", "https://drive.google.com/uc?id=11HMwwKGuU3Zy-lrtME8fX4mk7w6ImIRW&export=download&confirm=t"} ,
+        { "SKINNY", "2014", "/Cover/14.jpg", "https://drive.google.com/uc?id=10z8O0AdnRimbpxOwgkWguqOY24Du1mqu&export=download&confirm=t"} ,
+        { "ROTTEN", "2014", "/Cover/15.jpg", "https://drive.google.com/uc?id=10cdFaTpFynEjlMPFIrhz5q8Vqx446f5r&export=download&confirm=t"} ,
+        { "GARBAGE", "2014", "/Cover/16.jpg", "https://drive.google.com/uc?id=1-ciHqb4oij0HRoTOdosCCt5Y3MpXk8Aq&export=download&confirm=t"} ,
+        { "HERMITOFEASTGRANDRIVER", "2015", "/Cover/17.jpg", "https://drive.google.com/uc?id=1-l6666xVyNvaV30YgttmgRg_xO5cBQI3&export=download&confirm=t"} ,
+        { "YOUSHOULDHAVESEENYOURFACE", "2015", "/Cover/47.jpg", "https://drive.google.com/uc?id=11z9USy117ihV1huweh4g-jfQedDQ2Rqt&export=download&confirm=t"} ,
+        { "BANSHEE", "2015", "/Cover/18.jpg", "https://drive.google.com/uc?id=1txmYPuYxNsSTQgKGO9J0gMi7rcw577O7&export=download&confirm=t"} ,
+        { "KICKINGTHEBUCKET", "2015", "/Cover/50.jpg", "https://drive.google.com/uc?id=124aam0nUQHNn_eNPIxs0E1YI7WuZlu0E&export=download&confirm=t"} ,
+        { "POWDER", "2015", "/Cover/19.jpg", "https://drive.google.com/uc?id=10c2rkj6jJxIy_wtDIKeLBNqH-Oxf-yJW&export=download&confirm=t"} ,
+        { "FRAYED", "2015", "/Cover/20.jpg", "https://drive.google.com/uc?id=1-UjDfFHcCUlI4k0LzfBBz9HtuMpkz5sh&export=download&confirm=t"} ,
+        { "GOODFORNOTHING", "2016", "/Cover/21.jpg", "https://drive.google.com/uc?id=1-dSfY0rJSdj2U4a-geJXWxoNcYv_HmZx&export=download&confirm=t"} ,
+        { "PAIDPROGRAMMING2", "2016", "/Cover/22.jpg", "https://drive.google.com/uc?id=10KzHHys_gzJrcX7JxicsLBF4RuRwOUkY&export=download&confirm=t"} ,
+        { "SOFWAREUPDATE1.0", "2016", "/Cover/23.jpg", "https://drive.google.com/uc?id=1102AZyrSiixDd2ftrauUpNp4ZPvlGmeF&export=download&confirm=t"} ,
+        { "USELESS", "2016", "/Cover/24.jpg", "https://drive.google.com/uc?id=11dx1NTLTH-DTig0VDJGqgl93Od97aUtQ&export=download&confirm=t"} ,
+        { "CARCASS", "2017", "/Cover/25.jpg", "https://drive.google.com/uc?id=1-A3HUUrbRCPmgKjaMwGlBnrjnW52eAbO&export=download&confirm=t"} ,
+        { "FAILURE", "2017", "/Cover/26.jpg", "https://drive.google.com/uc?id=1-UYJ3XiLNN4xFjKE7ED9xoq7nXaQrQeb&export=download&confirm=t"} ,
+        { "DISGRACE", "2017", "/Cover/27.jpg", "https://drive.google.com/uc?id=1-SlFfFEKIfUXWUKirpCjP15zylPDQ6i0&export=download&confirm=t"} ,
+        { "UNRENDERED", "2017", "/Cover/28.jpg", "https://drive.google.com/uc?id=11di90rq18bI8uRc_9IhZjZOVf2eBM21C&export=download&confirm=t"} ,
+        { "NOREDEEMINGQUALITIES", "2017", "/Cover/29.jpg", "https://drive.google.com/uc?id=10DBwnstTRV3Kwoz7OlJgs6qWXlNB6Pjy&export=download&confirm=t"} ,
+        { "LIVINGSUCKS", "2018", "/Cover/30.jpg", "https://drive.google.com/uc?id=105V_VZf0y-KhUkjAaC6XBWnZ3wi9p_c8&export=download&confirm=t"} ,
+        { "THEMANINTHERADIATOR", "2018", "/Cover/31.jpg", "https://drive.google.com/uc?id=11JiPQgsRXVfTwQEszJAJ4ZWTWr8rs5tV&export=download&confirm=t"} ,
+        { "PERMANENTFROWN", "2018", "/Cover/32.jpg", "https://drive.google.com/uc?id=10RnLg1xfaRBP9LjB5hJx09VKbVdIgvQO&export=download&confirm=t"} ,
+        { "AUGMENTED", "2018", "/Cover/33.jpg", "https://drive.google.com/uc?id=12smlbW8uHGko-32OC8SHvHhNZpMCd1iw&export=download&confirm=t"} ,
+        { "UNDERTHEWILLOWTREE", "2019", "/Cover/34.jpg", "https://drive.google.com/uc?id=11XJW78UqhxuqHYaFUR1NUrs7HhLPSHG_&export=download&confirm=t"} ,
+        { "SPARROWSCREEK", "2019", "/Cover/35.jpg", "https://drive.google.com/uc?id=12lQoA4qZXSy6CxNCVNoaq9HIOeN62288&export=download&confirm=t"} ,
+        { "IFEELLIKEDIRT", "2019", "/Cover/36.jpg", "https://drive.google.com/uc?id=1-meyzQloPBix4zdQxVWexai4cBFRxitz&export=download&confirm=t"} ,
+        { "OFFLINE", "2020", "/Cover/37.jpg", "https://drive.google.com/uc?id=10Fn8EiNaruikO0VFxolgQpsa79FRXm0t&export=download&confirm=t"} ,
+        { "BRACE", "2020", "/Cover/39.jpg", "https://drive.google.com/uc?id=12QL9R4yreUt1d78AoOCOAzRQYgJVtw6Z&export=download&confirm=t"} ,
+        { "REMAINS", "2020", "/Cover/40.jpg", "https://drive.google.com/uc?id=10c9URRnYOgorgk_rLndV9va_y7ZXcyHG&export=download&confirm=t"} ,
+        { "FROMBEYONDTHEGRAVE", "2020", "/Cover/41.jpg", "https://drive.google.com/uc?id=1-YAMYz2eJ_d8mttudNO4EpMUFuXHyv2A&export=download&confirm=t"} ,
+        { "DAMAGEDGOODS", "2020", "/Cover/42.jpg", "https://drive.google.com/uc?id=1-EdojsDkYfomktHkwqt_KyCsrvb9NO9g&export=download&confirm=t"} ,
+        { "PUSHINGUPDAISIES", "2021", "/Cover/43.jpg", "https://drive.google.com/uc?id=10c7gdO4hEE2NQHMwFU3EYy1HUrVmrvpM&export=download&confirm=t"} ,
+        { "FORBIDDENIMAGE", "2021", "/Cover/44.jpg", "https://drive.google.com/uc?id=12tpykjukI0wmJs1RQmS_cczD00ScJZO9&export=download&confirm=t"} ,
+        { "INLOVINGMEMORY", "2021", "/Cover/45.jpg", "https://drive.google.com/uc?id=1-ncB6j_07q3W_OzTAjqImnSF3H6aOaEl&export=download&confirm=t"} ,
+        { "BURDEN", "2021", "/Cover/46.jpg", "https://drive.google.com/uc?id=12C_efxglApaRJ7SzHVg2q33_vsPazfc3&export=download&confirm=t"} ,
+        { "SCRAPS", "2021", "/Cover/scraps.jpeg", "https://drive.google.com/uc?id=10g2e6qRDSTklScbV-wExA_E0_gkGZvBK&export=download&confirm=t"} ,
         };
 
 		/* EXAMPLE USAGE
-		FileDownloader fileDownloader = new FileDownloader();
-		// This callback is triggered for DownloadFileAsync only
-		fileDownloader.DownloadProgressChanged += ( sender, e ) => Console.WriteLine( "Progress changed " + e.BytesReceived + " " + e.TotalBytesToReceive );
-		// This callback is triggered for both DownloadFile and DownloadFileAsync
-		fileDownloader.DownloadFileCompleted += ( sender, e ) => Console.WriteLine( "Download completed" );
-		fileDownloader.DownloadFileAsync( "https://INSERT_DOWNLOAD_LINK_HERE", @"C:\downloadedFile.txt" );
-		*/
+	FileDownloader fileDownloader = new FileDownloader();
+	// This callback is triggered for DownloadFileAsync only
+	fileDownloader.DownloadProgressChanged += ( sender, e ) => Console.WriteLine( "Progress changed " + e.BytesReceived + " " + e.TotalBytesToReceive );
+	// This callback is triggered for both DownloadFile and DownloadFileAsync
+	fileDownloader.DownloadFileCompleted += ( sender, e ) => Console.WriteLine( "Download completed" );
+	fileDownloader.DownloadFileAsync( "https://INSERT_DOWNLOAD_LINK_HERE", @"C:\downloadedFile.txt" );
+*/
 		public class FileDownloader : IDisposable
 		{
 			private const string GOOGLE_DRIVE_DOMAIN = "drive.google.com";
@@ -246,38 +246,30 @@ namespace BoneAlbumDownloader
 			{
 				DownloadFile(address, fileName, true, userToken);
 			}
-			
+
 			private void DownloadFile(string address, string fileName, bool asyncDownload, object userToken)
 			{
-                try
-                {
-					downloadingDriveFile = address.StartsWith(GOOGLE_DRIVE_DOMAIN) || address.StartsWith(GOOGLE_DRIVE_DOMAIN2);
-					if (downloadingDriveFile)
-					{
-						address = GetGoogleDriveDownloadAddress(address);
-						driveDownloadAttempt = 1;
+				downloadingDriveFile = address.StartsWith(GOOGLE_DRIVE_DOMAIN) || address.StartsWith(GOOGLE_DRIVE_DOMAIN2);
+				if (downloadingDriveFile)
+				{
+					address = GetGoogleDriveDownloadAddress(address);
+					driveDownloadAttempt = 1;
 
-						webClient.ContentRangeTarget = downloadProgress;
-					}
-					else
-						webClient.ContentRangeTarget = null;
-
-					downloadAddress = new Uri(address);
-					downloadPath = fileName;
-
-					downloadProgress.TotalBytesToReceive = -1L;
-					downloadProgress.UserState = userToken;
-
-					this.asyncDownload = asyncDownload;
-					this.userToken = userToken;
-
-					DownloadFileInternal();
+					webClient.ContentRangeTarget = downloadProgress;
 				}
-                catch (Exception)
-                {
-					MessageBox.Show($"Could not download. Please try again later.");
-                }
-				
+				else
+					webClient.ContentRangeTarget = null;
+
+				downloadAddress = new Uri(address);
+				downloadPath = fileName;
+
+				downloadProgress.TotalBytesToReceive = -1L;
+				downloadProgress.UserState = userToken;
+
+				this.asyncDownload = asyncDownload;
+				this.userToken = userToken;
+
+				DownloadFileInternal();
 			}
 
 			private void DownloadFileInternal()
@@ -335,17 +327,10 @@ namespace BoneAlbumDownloader
 				FileInfo downloadedFile = new FileInfo(downloadPath);
 				if (downloadedFile == null)
 					return true;
-                try
-                {
-					// Confirmation page is around 50KB, shouldn't be larger than 60KB
-					if (downloadedFile.Length > 60000L)
-						return true;
-				}
-                catch (Exception)
-                {
-					MessageBox.Show("Geen bestand beschikbaar.");
-                }
-				
+
+				// Confirmation page is around 50KB, shouldn't be larger than 60KB
+				if (downloadedFile.Length > 60000L)
+					return true;
 
 				// Downloaded file might be the confirmation page, check it
 				string content;
@@ -361,22 +346,24 @@ namespace BoneAlbumDownloader
 				}
 
 				int linkIndex = content.LastIndexOf("href=\"/uc?");
-				if (linkIndex < 0)
-					return true;
+				if (linkIndex >= 0)
+				{
+					linkIndex += 6;
+					int linkEnd = content.IndexOf('"', linkIndex);
+					if (linkEnd >= 0)
+					{
+						downloadAddress = new Uri("https://drive.google.com" + content.Substring(linkIndex, linkEnd - linkIndex).Replace("&amp;", "&"));
+						return false;
+					}
+				}
 
-				linkIndex += 6;
-				int linkEnd = content.IndexOf('"', linkIndex);
-				if (linkEnd < 0)
-					return true;
-
-				downloadAddress = new Uri("https://drive.google.com" + content.Substring(linkIndex, linkEnd - linkIndex).Replace("&amp;", "&"));
-				return false;
+				return true;
 			}
 
 			// Handles the following formats (links can be preceeded by https://):
-			// - drive.google.com/open?id=FILEID
-			// - drive.google.com/file/d/FILEID/view?usp=sharing
-			// - drive.google.com/uc?id=FILEID&export=download
+			// - drive.google.com/open?id=FILEID&resourcekey=RESOURCEKEY
+			// - drive.google.com/file/d/FILEID/view?usp=sharing&resourcekey=RESOURCEKEY
+			// - drive.google.com/uc?id=FILEID&export=download&resourcekey=RESOURCEKEY
 			private string GetGoogleDriveDownloadAddress(string address)
 			{
 				int index = address.IndexOf("id=");
@@ -405,7 +392,21 @@ namespace BoneAlbumDownloader
 					}
 				}
 
-				return string.Concat("https://drive.google.com/uc?id=", address.Substring(index, closingIndex - index), "&export=download");
+				string fileID = address.Substring(index, closingIndex - index);
+
+				index = address.IndexOf("resourcekey=");
+				if (index > 0)
+				{
+					index += 12;
+					closingIndex = address.IndexOf('&', index);
+					if (closingIndex < 0)
+						closingIndex = address.Length;
+
+					string resourceKey = address.Substring(index, closingIndex - index);
+					return string.Concat("https://drive.google.com/uc?id=", fileID, "&export=download&resourcekey=", resourceKey, "&confirm=t");
+				}
+				else
+					return string.Concat("https://drive.google.com/uc?id=", fileID, "&export=download&confirm=t");
 			}
 
 			public void Dispose()
@@ -417,13 +418,13 @@ namespace BoneAlbumDownloader
 		public MainWindow()
         {
             InitializeComponent();
-			this.Cursor = new Cursor(@"C:\Users\Toon Van Kimmenade\Downloads\BoneAlbumDownloader\BoneAlbumDownloader\Pics\cursor2.cur");
+			this.Cursor = new Cursor(System.IO.Path.Combine(Environment.CurrentDirectory, @"Pics\", "cursor2.cur"));
 			downloading.Visibility = Visibility.Hidden;
 			for (int i = 0; i < 48; i++)
             {
                 cmbAlbum.Items.Add(albums[i, 0]);
             }
-			player = new SoundPlayer("C:/Users/Toon Van Kimmenade/Downloads/BoneAlbumDownloader/BoneAlbumDownloader/Music/song1.wav");
+			player = new SoundPlayer(System.IO.Path.Combine(Environment.CurrentDirectory, @"Music\", "song1.wav"));
 			player.LoadCompleted += delegate (object sender, AsyncCompletedEventArgs e) {
 				player.Play();
 			};
@@ -431,14 +432,10 @@ namespace BoneAlbumDownloader
 		}
 		private void IsDone(string download, string albumnaam)
         {
+			answer = Microsoft.VisualBasic.Interaction.InputBox($"Please input the direct file path from file explorer. You can find it by clicking in top bar or through the properties window. Make sure to add an extra backslash to the file path or it will not work.\nDownloads is by default c>>users>yourusername.", "File directory input");
 			FileDownloader fileDownloader = new FileDownloader();
 			downloading.Visibility = Visibility.Visible;
 			downloading.Content = "Downloading";
-			username = Microsoft.VisualBasic.Interaction.InputBox("Enter your pc username. This is for exporting the file to the right location.");
-			if (customAnswer != true)
-			{
-				answer = $@"C:\Users\{username}\Downloads\";
-			}
 			savePathOutput = $@"{ answer}{albumnaam}.rar";
 			fileDownloader.DownloadProgressChanged += (sender, e) => downloading.Content = "Progress changed " + e.BytesReceived + " " + e.TotalBytesToReceive;
 			fileDownloader.DownloadFileCompleted += (sender, b) => downloading.Content = $"Download completed to \n{savePathOutput}";
@@ -503,20 +500,20 @@ namespace BoneAlbumDownloader
 			string cursor = Microsoft.VisualBasic.Interaction.InputBox($"Answers: seshcrown[w]hite, seshcrown[b]lack, [e]ddy, [s]tandard\nPlease enter the highlighted letter.", "File directory input");
 			if (cursor == "w" || cursor == "seshcrownwhite")
             {
-				this.Cursor = new Cursor(@"C:\Users\Toon Van Kimmenade\Downloads\BoneAlbumDownloader\BoneAlbumDownloader\Pics\sesh1.cur");
+				this.Cursor = new Cursor(System.IO.Path.Combine(Environment.CurrentDirectory, @"Pics\", "sesh1.cur"));
 			}
 			if (cursor == "b" || cursor == "seshcrownblack")
 			{
-				this.Cursor = new Cursor(@"C:\Users\Toon Van Kimmenade\Downloads\BoneAlbumDownloader\BoneAlbumDownloader\Pics\sesh2.cur");
+				this.Cursor = new Cursor(System.IO.Path.Combine(Environment.CurrentDirectory, @"Pics\", "sesh2.cur"));
 			}
 			else if (cursor == "e" || cursor == "eddy")
 			{
-				this.Cursor = new Cursor(@"C:\Users\Toon Van Kimmenade\Downloads\BoneAlbumDownloader\BoneAlbumDownloader\Pics\ed.cur");
+				this.Cursor = new Cursor(System.IO.Path.Combine(Environment.CurrentDirectory, @"Pics\", "ed.cur"));
 
 			}
 			else if (cursor == "s" || cursor == "standard")
 			{
-				this.Cursor = new Cursor(@"C:\Users\Toon Van Kimmenade\Downloads\BoneAlbumDownloader\BoneAlbumDownloader\Pics\cursor2.cur");
+				this.Cursor = new Cursor(System.IO.Path.Combine(Environment.CurrentDirectory, @"Pics\", "cursor2.cur"));
 			}
 		}
 
@@ -542,7 +539,7 @@ namespace BoneAlbumDownloader
             else
             {
 				player.Stop();
-				player2 = new SoundPlayer("C:/Users/Toon Van Kimmenade/Downloads/BoneAlbumDownloader/BoneAlbumDownloader/Music/song2.wav");
+				player2 = new SoundPlayer(System.IO.Path.Combine(Environment.CurrentDirectory, @"Music\", "song2.wav"));
 				player2.LoadCompleted += delegate (object sender2, AsyncCompletedEventArgs f) {
 					player2.Play();
 				};
@@ -554,7 +551,6 @@ namespace BoneAlbumDownloader
 
         private void changeDownload_Click(object sender, RoutedEventArgs e)
         {
-			customAnswer = true;
 			answer = Microsoft.VisualBasic.Interaction.InputBox($"Please input the direct file path from file explorer. You can find it by clicking in top bar or through the properties window. Make sure to add an extra backslash to the file path or it will not work.\nDownloads is by default c>>users>yourusername.", "File directory input");
 		}
 

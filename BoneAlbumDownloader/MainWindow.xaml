@@ -8,7 +8,7 @@
         WindowStyle="None"
         AllowsTransparency="True"
         ResizeMode="CanResizeWithGrip"
-        Title="BoneLoader" Height="591" Width="575" Icon="C:\Users\Toon Van Kimmenade\Downloads\BoneAlbumDownloader\BoneAlbumDownloader\Pics\cursor.ico">
+        Title="BoneLoader" Height="591" Width="575" Icon="Pics/cursor.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0*"/>
