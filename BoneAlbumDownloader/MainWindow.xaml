@@ -18,8 +18,7 @@
         </Grid.RowDefinitions>
         <Image x:Name="backgroundImage" Source="/Cover/bg.jpg" Stretch="UniformToFill" Grid.Row="1" Grid.RowSpan="3" Margin="-106,0,-106,0"/>
         <ComboBox x:Name="cmbAlbum" Margin="0,102,0,0" SelectionChanged="cmbAlbum_SelectionChanged" Grid.Row="2" Height="22" VerticalAlignment="Top" HorizontalAlignment="Center" Width="153" HorizontalContentAlignment="Center"/>
-        <TextBox x:Name="txtLink" HorizontalAlignment="Center" Margin="0,420,0,0" TextWrapping="Wrap" Background="#FF040404" Foreground="White" BorderBrush="{x:Null}" Grid.Row="2" Text="select an album" HorizontalContentAlignment="Center" VerticalAlignment="Top" Height="18" Width="89"/>
-        <Label x:Name="downloading" Content="link copied to clipboard" HorizontalAlignment="Center" Margin="0,245,0,0" Foreground="White" Visibility="Visible" Grid.Row="2" Background="Black" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="26" Width="135"/>
+        <Label x:Name="downloading" Content="select an album" HorizontalAlignment="Center" Margin="0,236,0,0" Foreground="White" Visibility="Visible" Grid.Row="2" Background="Black" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
         <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="1" Background="Black" Height="42" Grid.RowSpan="2" Width="0"/>
         <WrapPanel Grid.RowSpan="3"/>
         <WrapPanel Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center" Width="233" Height="54">

@@ -89,7 +89,6 @@ namespace BoneAlbumDownloader
         {
             InitializeComponent();
 			this.Cursor = new Cursor(System.IO.Path.Combine(Environment.CurrentDirectory, @"Pics\", "cursor2.cur"));
-			downloading.Visibility = Visibility.Hidden;
 			prgProgress.Visibility = Visibility.Hidden;
             lblSongName.Visibility = Visibility.Hidden;
             for (int i = 0; i < 48; i++)
@@ -130,6 +129,11 @@ namespace BoneAlbumDownloader
 				fileDownloader.DownloadFileCompleted += (sender, b) => downloading.Content = $"Download completed to \n{filename}";
 				fileDownloader.DownloadFileAsync($"{download}", filename);
 			}
+            else
+            {
+                backgroundImage.Source = new BitmapImage(new Uri($@"/Cover/bg.jpg", UriKind.Relative));
+                cmbAlbum.SelectedIndex = -1;
+            }
 		}
 
         private void clickClip_Click(object sender, RoutedEventArgs e)
@@ -253,6 +257,7 @@ namespace BoneAlbumDownloader
         {
             player.Previous();
             CurrentSong();
+            lblSongName.Visibility = Visibility.Visible;
             //try
             //{
             //    player2.Stop();
@@ -273,7 +278,6 @@ namespace BoneAlbumDownloader
 
         private void cmbAlbum_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-			txtLink.Visibility = Visibility.Hidden;
             int i = cmbAlbum.SelectedIndex;
             for (int j = 0; j < 48; j++)
             {
@@ -283,8 +287,8 @@ namespace BoneAlbumDownloader
                     string link = albums[j, 3];
 					album = albums[j, 0];
 					backgroundImage.Source = new BitmapImage(new Uri($@"{image}", UriKind.Relative));
-					IsDone(link, album);
-				}
+                    IsDone(link, album);
+                }
             }
         }
     }
