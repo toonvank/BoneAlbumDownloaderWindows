@@ -29,11 +29,10 @@ namespace BoneAlbumDownloader
     /// </summary>
     public partial class MainWindow : Window
     {
-		string savePathOutput, album, answer, username;
-		bool ispressed = false;
-		SoundPlayer player, player2;
+        string album;
+		//SoundPlayer player, player2, player3;
+        MusicPlayer player = new MusicPlayer();
 		int i = 0;
-
 
 		private string[,] albums = { 
         { "BONES", "2012", "/Cover/1.jpg", "https://drive.google.com/uc?export=download&id=11zHwGe5fZZV8rkyRTX023L6FUHKc0k5g&confirm=t"}, 
@@ -86,350 +85,22 @@ namespace BoneAlbumDownloader
         { "SCRAPS", "2021", "/Cover/scraps.jpeg", "https://drive.google.com/uc?id=10g2e6qRDSTklScbV-wExA_E0_gkGZvBK&export=download&confirm=t"} ,
         };
 
-		/* EXAMPLE USAGE
-	FileDownloader fileDownloader = new FileDownloader();
-	// This callback is triggered for DownloadFileAsync only
-	fileDownloader.DownloadProgressChanged += ( sender, e ) => Console.WriteLine( "Progress changed " + e.BytesReceived + " " + e.TotalBytesToReceive );
-	// This callback is triggered for both DownloadFile and DownloadFileAsync
-	fileDownloader.DownloadFileCompleted += ( sender, e ) => Console.WriteLine( "Download completed" );
-	fileDownloader.DownloadFileAsync( "https://INSERT_DOWNLOAD_LINK_HERE", @"C:\downloadedFile.txt" );
-*/
-		public class FileDownloader : IDisposable
-		{
-			private const string GOOGLE_DRIVE_DOMAIN = "drive.google.com";
-			private const string GOOGLE_DRIVE_DOMAIN2 = "https://drive.google.com";
-
-			// In the worst case, it is necessary to send 3 download requests to the Drive address
-			//   1. an NID cookie is returned instead of a download_warning cookie
-			//   2. download_warning cookie returned
-			//   3. the actual file is downloaded
-			private const int GOOGLE_DRIVE_MAX_DOWNLOAD_ATTEMPT = 3;
-
-			public delegate void DownloadProgressChangedEventHandler(object sender, DownloadProgress progress);
-
-			// Custom download progress reporting (needed for Google Drive)
-			public class DownloadProgress
-			{
-				public long BytesReceived, TotalBytesToReceive;
-				public object UserState;
-
-				public int ProgressPercentage
-				{
-					get
-					{
-						if (TotalBytesToReceive > 0L)
-							return (int)(((double)BytesReceived / TotalBytesToReceive) * 100);
-
-						return 0;
-					}
-				}
-			}
-
-			// Web client that preserves cookies (needed for Google Drive)
-			private class CookieAwareWebClient : WebClient
-			{
-				private class CookieContainer
-				{
-					private readonly Dictionary<string, string> cookies = new Dictionary<string, string>();
-
-					public string this[Uri address]
-					{
-						get
-						{
-							string cookie;
-							if (cookies.TryGetValue(address.Host, out cookie))
-								return cookie;
-
-							return null;
-						}
-						set
-						{
-							cookies[address.Host] = value;
-						}
-					}
-				}
-
-				private readonly CookieContainer cookies = new CookieContainer();
-				public DownloadProgress ContentRangeTarget;
-
-				protected override WebRequest GetWebRequest(Uri address)
-				{
-					WebRequest request = base.GetWebRequest(address);
-					if (request is HttpWebRequest)
-					{
-						string cookie = cookies[address];
-						if (cookie != null)
-							((HttpWebRequest)request).Headers.Set("cookie", cookie);
-
-						if (ContentRangeTarget != null)
-							((HttpWebRequest)request).AddRange(0);
-					}
-
-					return request;
-				}
-
-				protected override WebResponse GetWebResponse(WebRequest request, IAsyncResult result)
-				{
-					return ProcessResponse(base.GetWebResponse(request, result));
-				}
-
-				protected override WebResponse GetWebResponse(WebRequest request)
-				{
-					return ProcessResponse(base.GetWebResponse(request));
-				}
-
-				private WebResponse ProcessResponse(WebResponse response)
-				{
-					string[] cookies = response.Headers.GetValues("Set-Cookie");
-					if (cookies != null && cookies.Length > 0)
-					{
-						int length = 0;
-						for (int i = 0; i < cookies.Length; i++)
-							length += cookies[i].Length;
-
-						StringBuilder cookie = new StringBuilder(length);
-						for (int i = 0; i < cookies.Length; i++)
-							cookie.Append(cookies[i]);
-
-						this.cookies[response.ResponseUri] = cookie.ToString();
-					}
-
-					if (ContentRangeTarget != null)
-					{
-						string[] rangeLengthHeader = response.Headers.GetValues("Content-Range");
-						if (rangeLengthHeader != null && rangeLengthHeader.Length > 0)
-						{
-							int splitIndex = rangeLengthHeader[0].LastIndexOf('/');
-							if (splitIndex >= 0 && splitIndex < rangeLengthHeader[0].Length - 1)
-							{
-								long length;
-								if (long.TryParse(rangeLengthHeader[0].Substring(splitIndex + 1), out length))
-									ContentRangeTarget.TotalBytesToReceive = length;
-							}
-						}
-					}
-
-					return response;
-				}
-			}
-
-			private readonly CookieAwareWebClient webClient;
-			private readonly DownloadProgress downloadProgress;
-
-			private Uri downloadAddress;
-			private string downloadPath;
-
-			private bool asyncDownload;
-			private object userToken;
-
-			private bool downloadingDriveFile;
-			private int driveDownloadAttempt;
-
-			public event DownloadProgressChangedEventHandler DownloadProgressChanged;
-			public event AsyncCompletedEventHandler DownloadFileCompleted;
-
-			public FileDownloader()
-			{
-				webClient = new CookieAwareWebClient();
-				webClient.DownloadProgressChanged += DownloadProgressChangedCallback;
-				webClient.DownloadFileCompleted += DownloadFileCompletedCallback;
-
-				downloadProgress = new DownloadProgress();
-			}
-
-			public void DownloadFile(string address, string fileName)
-			{
-				DownloadFile(address, fileName, false, null);
-			}
-
-			public void DownloadFileAsync(string address, string fileName, object userToken = null)
-			{
-				DownloadFile(address, fileName, true, userToken);
-			}
-
-			private void DownloadFile(string address, string fileName, bool asyncDownload, object userToken)
-			{
-				downloadingDriveFile = address.StartsWith(GOOGLE_DRIVE_DOMAIN) || address.StartsWith(GOOGLE_DRIVE_DOMAIN2);
-				if (downloadingDriveFile)
-				{
-					address = GetGoogleDriveDownloadAddress(address);
-					driveDownloadAttempt = 1;
-
-					webClient.ContentRangeTarget = downloadProgress;
-				}
-				else
-					webClient.ContentRangeTarget = null;
-
-				downloadAddress = new Uri(address);
-				downloadPath = fileName;
-
-				downloadProgress.TotalBytesToReceive = -1L;
-				downloadProgress.UserState = userToken;
-
-				this.asyncDownload = asyncDownload;
-				this.userToken = userToken;
-
-				DownloadFileInternal();
-			}
-
-			private void DownloadFileInternal()
-			{
-				if (!asyncDownload)
-				{
-					webClient.DownloadFile(downloadAddress, downloadPath);
-
-					// This callback isn't triggered for synchronous downloads, manually trigger it
-					DownloadFileCompletedCallback(webClient, new AsyncCompletedEventArgs(null, false, null));
-				}
-				else if (userToken == null)
-					webClient.DownloadFileAsync(downloadAddress, downloadPath);
-				else
-					webClient.DownloadFileAsync(downloadAddress, downloadPath, userToken);
-			}
-
-			private void DownloadProgressChangedCallback(object sender, DownloadProgressChangedEventArgs e)
-			{
-				if (DownloadProgressChanged != null)
-				{
-					downloadProgress.BytesReceived = e.BytesReceived;
-					if (e.TotalBytesToReceive > 0L)
-						downloadProgress.TotalBytesToReceive = e.TotalBytesToReceive;
-
-					DownloadProgressChanged(this, downloadProgress);
-				}
-			}
-
-			private void DownloadFileCompletedCallback(object sender, AsyncCompletedEventArgs e)
-			{
-				if (!downloadingDriveFile)
-				{
-					if (DownloadFileCompleted != null)
-						DownloadFileCompleted(this, e);
-				}
-				else
-				{
-					if (driveDownloadAttempt < GOOGLE_DRIVE_MAX_DOWNLOAD_ATTEMPT && !ProcessDriveDownload())
-					{
-						// Try downloading the Drive file again
-						driveDownloadAttempt++;
-						DownloadFileInternal();
-					}
-					else if (DownloadFileCompleted != null)
-						DownloadFileCompleted(this, e);
-				}
-			}
-
-			// Downloading large files from Google Drive prompts a warning screen and requires manual confirmation
-			// Consider that case and try to confirm the download automatically if warning prompt occurs
-			// Returns true, if no more download requests are necessary
-			private bool ProcessDriveDownload()
-			{
-				FileInfo downloadedFile = new FileInfo(downloadPath);
-				if (downloadedFile == null)
-					return true;
-
-				// Confirmation page is around 50KB, shouldn't be larger than 60KB
-				if (downloadedFile.Length > 60000L)
-					return true;
-
-				// Downloaded file might be the confirmation page, check it
-				string content;
-				using (var reader = downloadedFile.OpenText())
-				{
-					// Confirmation page starts with <!DOCTYPE html>, which can be preceeded by a newline
-					char[] header = new char[20];
-					int readCount = reader.ReadBlock(header, 0, 20);
-					if (readCount < 20 || !(new string(header).Contains("<!DOCTYPE html>")))
-						return true;
-
-					content = reader.ReadToEnd();
-				}
-
-				int linkIndex = content.LastIndexOf("href=\"/uc?");
-				if (linkIndex >= 0)
-				{
-					linkIndex += 6;
-					int linkEnd = content.IndexOf('"', linkIndex);
-					if (linkEnd >= 0)
-					{
-						downloadAddress = new Uri("https://drive.google.com" + content.Substring(linkIndex, linkEnd - linkIndex).Replace("&amp;", "&"));
-						return false;
-					}
-				}
-
-				return true;
-			}
-
-			// Handles the following formats (links can be preceeded by https://):
-			// - drive.google.com/open?id=FILEID&resourcekey=RESOURCEKEY
-			// - drive.google.com/file/d/FILEID/view?usp=sharing&resourcekey=RESOURCEKEY
-			// - drive.google.com/uc?id=FILEID&export=download&resourcekey=RESOURCEKEY
-			private string GetGoogleDriveDownloadAddress(string address)
-			{
-				int index = address.IndexOf("id=");
-				int closingIndex;
-				if (index > 0)
-				{
-					index += 3;
-					closingIndex = address.IndexOf('&', index);
-					if (closingIndex < 0)
-						closingIndex = address.Length;
-				}
-				else
-				{
-					index = address.IndexOf("file/d/");
-					if (index < 0) // address is not in any of the supported forms
-						return string.Empty;
-
-					index += 7;
-
-					closingIndex = address.IndexOf('/', index);
-					if (closingIndex < 0)
-					{
-						closingIndex = address.IndexOf('?', index);
-						if (closingIndex < 0)
-							closingIndex = address.Length;
-					}
-				}
-
-				string fileID = address.Substring(index, closingIndex - index);
-
-				index = address.IndexOf("resourcekey=");
-				if (index > 0)
-				{
-					index += 12;
-					closingIndex = address.IndexOf('&', index);
-					if (closingIndex < 0)
-						closingIndex = address.Length;
-
-					string resourceKey = address.Substring(index, closingIndex - index);
-					return string.Concat("https://drive.google.com/uc?id=", fileID, "&export=download&resourcekey=", resourceKey, "&confirm=t");
-				}
-				else
-					return string.Concat("https://drive.google.com/uc?id=", fileID, "&export=download&confirm=t");
-			}
-
-			public void Dispose()
-			{
-				webClient.Dispose();
-			}
-		}
-
 		public MainWindow()
         {
             InitializeComponent();
 			this.Cursor = new Cursor(System.IO.Path.Combine(Environment.CurrentDirectory, @"Pics\", "cursor2.cur"));
 			downloading.Visibility = Visibility.Hidden;
 			prgProgress.Visibility = Visibility.Hidden;
-			for (int i = 0; i < 48; i++)
+            lblSongName.Visibility = Visibility.Hidden;
+            for (int i = 0; i < 48; i++)
             {
                 cmbAlbum.Items.Add(albums[i, 0]);
             }
-			player = new SoundPlayer(System.IO.Path.Combine(Environment.CurrentDirectory, @"Music\", "song1.wav"));
-			player.LoadCompleted += delegate (object sender, AsyncCompletedEventArgs e) {
-				player.Play();
-			};
-			player.LoadAsync();
+			//player = new SoundPlayer(System.IO.Path.Combine(Environment.CurrentDirectory, @"Music\", "song1.wav"));
+			//player.LoadCompleted += delegate (object sender, AsyncCompletedEventArgs e) {
+			//	player.Play();
+			//};
+			//player.LoadAsync();
 		}
 
 
@@ -449,7 +120,7 @@ namespace BoneAlbumDownloader
 			{
 				// Save document
 				string filename = dialog.FileName;
-				FileDownloader fileDownloader = new FileDownloader();
+				Download.FileDownloader fileDownloader = new Download.FileDownloader();
 				downloading.Visibility = Visibility.Visible;
 				prgProgress.Visibility = Visibility.Visible;
 				downloading.Content = "Download started";
@@ -492,15 +163,18 @@ namespace BoneAlbumDownloader
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (ispressed == false)
-            {
-				player.Play();
-			}
-            else
-            {
-				player2.Play();
-			}
-		}
+            player.Start();
+            CurrentSong();
+            lblSongName.Visibility = Visibility.Visible;
+            //         if (ispressed == false)
+            //         {
+            //	player.Play();
+            //}
+            //         else
+            //         {
+            //	player2.Play();
+            //}
+        }
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
@@ -534,38 +208,68 @@ namespace BoneAlbumDownloader
 				this.Cursor = new Cursor(System.IO.Path.Combine(Environment.CurrentDirectory, @"Pics\", "cursor2.cur"));
 			}
 		}
-
+        private void CurrentSong()
+        {
+            lblSongName.Content = player.CurrentSong;
+        }
 		private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-			if (ispressed == false)
-			{
-				player.Stop();
-			}
-			else
-			{
-				player2.Stop();
-			}
-		}
+            player.Stop();
+            lblSongName.Visibility = Visibility.Hidden;
+            //if (ispressed == false)
+            //{
+            //	player.Stop();
+            //}
+            //else
+            //{
+            //	player2.Stop();
+            //}
+        }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-			i++;
-            if (i == 2)
-            {
-				MessageBox.Show("This is an album downloader. Not a music player.");
-            }
-            else
-            {
-				player.Stop();
-				player2 = new SoundPlayer(System.IO.Path.Combine(Environment.CurrentDirectory, @"Music\", "song2.wav"));
-				player2.LoadCompleted += delegate (object sender2, AsyncCompletedEventArgs f) {
-					player2.Play();
-				};
-				player2.LoadAsync();
-				ispressed = true;
-			}
-			
-		}
+            player.Next();
+            CurrentSong();
+            lblSongName.Visibility = Visibility.Visible;
+            //i++;
+            //         if (i == 2)
+            //         {
+            //	MessageBox.Show("This is an album downloader. Not a music player.");
+            //         }
+            //         else
+            //         {
+            //	player.Stop();
+            //	player2 = new SoundPlayer(System.IO.Path.Combine(Environment.CurrentDirectory, @"Music\", "song2.wav"));
+            //	player2.LoadCompleted += delegate (object sender2, AsyncCompletedEventArgs f) {
+            //		player2.Play();
+            //	};
+            //	player2.LoadAsync();
+            //	ispressed = true;
+            //}
+
+        }
+
+        private void Button_Click_5(object sender, RoutedEventArgs e)
+        {
+            player.Previous();
+            CurrentSong();
+            //try
+            //{
+            //    player2.Stop();
+            //    player3 = new SoundPlayer(System.IO.Path.Combine(Environment.CurrentDirectory, @"Music\", "song1.wav"));
+            //    player3.LoadCompleted += delegate (object sender2, AsyncCompletedEventArgs f) {
+            //        player3.Play();
+            //    };
+            //    player3.LoadAsync();
+            //    ispressed = true;
+            //}
+            //catch (Exception)
+            //{
+            //    MessageBox.Show("You can't go back");
+            //    throw;
+            //}
+
+        }
 
         private void cmbAlbum_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
