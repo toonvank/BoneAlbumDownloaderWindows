@@ -21,6 +21,11 @@ using System.Net;
 using System.Text;
 using Microsoft.Win32;
 using System.Media;
+using System.Diagnostics;
+using SharpCompress.Archives.Rar;
+using SharpCompress.Common;
+using SharpCompress.Archives;
+using System.Threading;
 
 namespace BoneAlbumDownloader
 {
@@ -29,7 +34,7 @@ namespace BoneAlbumDownloader
     /// </summary>
     public partial class MainWindow : Window
     {
-        string album;
+        string album, filename;
 		//SoundPlayer player, player2, player3;
         MusicPlayer player = new MusicPlayer();
 		int i = 0;
@@ -91,6 +96,7 @@ namespace BoneAlbumDownloader
 			this.Cursor = new Cursor(System.IO.Path.Combine(Environment.CurrentDirectory, @"Pics\", "cursor2.cur"));
 			prgProgress.Visibility = Visibility.Hidden;
             lblSongName.Visibility = Visibility.Hidden;
+            btnExplorer.Visibility = Visibility.Hidden;
             for (int i = 0; i < 48; i++)
             {
                 cmbAlbum.Items.Add(albums[i, 0]);
@@ -118,7 +124,7 @@ namespace BoneAlbumDownloader
 			if (result == true)
 			{
 				// Save document
-				string filename = dialog.FileName;
+				filename = dialog.FileName;
 				Download.FileDownloader fileDownloader = new Download.FileDownloader();
 				downloading.Visibility = Visibility.Visible;
 				prgProgress.Visibility = Visibility.Visible;
@@ -127,6 +133,8 @@ namespace BoneAlbumDownloader
 				fileDownloader.DownloadProgressChanged += (sender, e) => prgProgress.Maximum = e.TotalBytesToReceive;
 				fileDownloader.DownloadProgressChanged += (sender, e) => prgProgress.Value = e.BytesReceived;
 				fileDownloader.DownloadFileCompleted += (sender, b) => downloading.Content = $"Download completed to \n{filename}";
+				fileDownloader.DownloadFileCompleted += (sender, b) => btnExplorer.Visibility = Visibility.Visible;
+				fileDownloader.DownloadFileCompleted += (sender, b) => prgProgress.Visibility = Visibility.Hidden;
 				fileDownloader.DownloadFileAsync($"{download}", filename);
 			}
             else
@@ -290,6 +298,25 @@ namespace BoneAlbumDownloader
                     IsDone(link, album);
                 }
             }
+        }
+
+        private void btnExplorer_Click(object sender, RoutedEventArgs e)
+        {
+            string path = filename.Replace($"{album}.rar", "");
+            // Read RAR file
+            RarArchive rarArchive = RarArchive.Open(filename);
+            // Extract all data
+            foreach (var entry in rarArchive.Entries.Where(entry => !entry.IsDirectory))
+            {
+                entry.WriteToDirectory(path, new ExtractionOptions()
+                {
+                    ExtractFullPath = true,
+                    Overwrite = true
+                });
+            }
+            rarArchive.Dispose();
+            File.Delete(filename);
+            Process.Start(path);
         }
     }
 }

@@ -425,42 +425,5 @@ namespace BoneAlbumDownloader
         {
 			sex[i, 0].Stop();
 		}
-
-		//play a song
-		// if (ispressed == false)
-		//         {
-		//	player.Play();
-		//}
-		//         else
-		//         {
-		//	player2.Play();
-		//}
-
-		//pause a song
-		//if (ispressed == false)
-		//{
-		//	player.Stop();
-		//}
-		//else
-		//{
-		//	player2.Stop();
-		//}
-
-		//next song
-		//i++;
-		//         if (i == 2)
-		//         {
-		//	MessageBox.Show("This is an album downloader. Not a music player.");
-		//         }
-		//         else
-		//         {
-		//	player.Stop();
-		//	player2 = new SoundPlayer(System.IO.Path.Combine(Environment.CurrentDirectory, @"Music\", "song2.wav"));
-		//	player2.LoadCompleted += delegate (object sender2, AsyncCompletedEventArgs f) {
-		//		player2.Play();
-		//	};
-		//player2.LoadAsync();
-		//	ispressed = true;
-		//}
 	}
 }
