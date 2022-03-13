@@ -306,6 +306,8 @@ namespace BoneAlbumDownloader
             // Read RAR file
             RarArchive rarArchive = RarArchive.Open(filename);
             // Extract all data
+            string extractPath = string.Empty;
+            int i = 0;
             foreach (var entry in rarArchive.Entries.Where(entry => !entry.IsDirectory))
             {
                 entry.WriteToDirectory(path, new ExtractionOptions()
@@ -313,10 +315,19 @@ namespace BoneAlbumDownloader
                     ExtractFullPath = true,
                     Overwrite = true
                 });
+                while (i<1)
+                {
+                    extractPath = Convert.ToString(entry.Key);
+                    int index = extractPath.IndexOf("\\");
+                    if (index >= 0)
+                        extractPath = extractPath.Substring(0, index);
+                    i++;
+                }
             }
             rarArchive.Dispose();
             File.Delete(filename);
-            Process.Start(path);
+            string extractedPath = System.IO.Path.Combine(path, extractPath);
+            Process.Start(extractedPath);
         }
     }
 }
