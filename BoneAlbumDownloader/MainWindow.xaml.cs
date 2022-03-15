@@ -34,7 +34,7 @@ namespace BoneAlbumDownloader
     /// </summary>
     public partial class MainWindow : Window
     {
-        string album, filename;
+        string album, filename, year;
 		//SoundPlayer player, player2, player3;
         MusicPlayer player = new MusicPlayer();
 		int i = 0;
@@ -97,6 +97,7 @@ namespace BoneAlbumDownloader
 			prgProgress.Visibility = Visibility.Hidden;
             lblSongName.Visibility = Visibility.Hidden;
             btnExplorer.Visibility = Visibility.Hidden;
+            stckExplorerOptions.Visibility = Visibility.Hidden;
             for (int i = 0; i < 48; i++)
             {
                 cmbAlbum.Items.Add(albums[i, 0]);
@@ -107,8 +108,27 @@ namespace BoneAlbumDownloader
 			//};
 			//player.LoadAsync();
 		}
+        private void StartPos()
+        {
+            backgroundImage.Source = new BitmapImage(new Uri($@"/Cover/bg.jpg", UriKind.Relative));
+            cmbAlbum.SelectedIndex = -1;
+            prgProgress.Visibility = Visibility.Hidden;
+            lblSongName.Visibility = Visibility.Hidden;
+            btnExplorer.Visibility = Visibility.Hidden;
+            stckExplorerOptions.Visibility = Visibility.Hidden;
+            downloading.Content = "select an album";
+        }
 
+        private void DownloadDone()
+        {
+            stckExplorerOptions.Visibility = Visibility.Visible;
+            cmbAlbum.Visibility = Visibility.Hidden;
+            prgProgress.Visibility = Visibility.Hidden;
+            btnExplorer.Visibility = Visibility.Visible;
 
+            cmbAlbum.Visibility = Visibility.Visible;
+            downloading.Content = $"Download completed to \n{filename}";
+        }
 		private void IsDone(string download, string albumnaam)
         {
 			// Configure save file dialog box
@@ -123,24 +143,24 @@ namespace BoneAlbumDownloader
 			// Process save file dialog box results
 			if (result == true)
 			{
-				// Save document
-				filename = dialog.FileName;
+
+                cmbAlbum.Visibility = Visibility.Hidden;
+                // Save document
+                filename = dialog.FileName;
 				Download.FileDownloader fileDownloader = new Download.FileDownloader();
 				downloading.Visibility = Visibility.Visible;
 				prgProgress.Visibility = Visibility.Visible;
-				downloading.Content = "Download started";
+				downloading.Content = $"Downloading {album} ({year})";
 				//fileDownloader.DownloadProgressChanged += (sender, e) => downloading.Content = "Progress changed " + e.BytesReceived + " " + e.TotalBytesToReceive;
 				fileDownloader.DownloadProgressChanged += (sender, e) => prgProgress.Maximum = e.TotalBytesToReceive;
 				fileDownloader.DownloadProgressChanged += (sender, e) => prgProgress.Value = e.BytesReceived;
 				fileDownloader.DownloadFileCompleted += (sender, b) => downloading.Content = $"Download completed to \n{filename}";
-				fileDownloader.DownloadFileCompleted += (sender, b) => btnExplorer.Visibility = Visibility.Visible;
-				fileDownloader.DownloadFileCompleted += (sender, b) => prgProgress.Visibility = Visibility.Hidden;
+				fileDownloader.DownloadFileCompleted += (sender, b) => DownloadDone();
 				fileDownloader.DownloadFileAsync($"{download}", filename);
 			}
             else
             {
-                backgroundImage.Source = new BitmapImage(new Uri($@"/Cover/bg.jpg", UriKind.Relative));
-                cmbAlbum.SelectedIndex = -1;
+                StartPos();
             }
 		}
 
@@ -190,7 +210,7 @@ namespace BoneAlbumDownloader
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
-			this.Close();
+            this.Close();
 		}
 
         private void Button_Click_4(object sender, RoutedEventArgs e)
@@ -294,40 +314,54 @@ namespace BoneAlbumDownloader
                     string image = albums[j, 2];
                     string link = albums[j, 3];
 					album = albums[j, 0];
+					year = albums[j, 1];
 					backgroundImage.Source = new BitmapImage(new Uri($@"{image}", UriKind.Relative));
                     IsDone(link, album);
                 }
             }
+            stckExplorerOptions.Visibility = Visibility.Hidden;
+            btnExplorer.Visibility = Visibility.Hidden;
         }
 
         private void btnExplorer_Click(object sender, RoutedEventArgs e)
         {
             string path = filename.Replace($"{album}.rar", "");
-            // Read RAR file
-            RarArchive rarArchive = RarArchive.Open(filename);
-            // Extract all data
             string extractPath = string.Empty;
-            int i = 0;
-            foreach (var entry in rarArchive.Entries.Where(entry => !entry.IsDirectory))
+            if (cbAutoExtract.IsChecked == true)
             {
-                entry.WriteToDirectory(path, new ExtractionOptions()
+                // Read RAR file
+                RarArchive rarArchive = RarArchive.Open(filename);
+                // Extract all data
+                int i = 0;
+                foreach (var entry in rarArchive.Entries.Where(entry => !entry.IsDirectory))
                 {
-                    ExtractFullPath = true,
-                    Overwrite = true
-                });
-                while (i<1)
-                {
-                    extractPath = Convert.ToString(entry.Key);
-                    int index = extractPath.IndexOf("\\");
-                    if (index >= 0)
-                        extractPath = extractPath.Substring(0, index);
-                    i++;
+                    entry.WriteToDirectory(path, new ExtractionOptions()
+                    {
+                        ExtractFullPath = true,
+                        Overwrite = true
+                    });
+                    while (i < 1)
+                    {
+                        extractPath = Convert.ToString(entry.Key);
+                        int index = extractPath.IndexOf("\\");
+                        if (index >= 0)
+                            extractPath = extractPath.Substring(0, index);
+                        i++;
+                    }
                 }
+                rarArchive.Dispose();
             }
-            rarArchive.Dispose();
-            File.Delete(filename);
+            if (cbAutoDelete.IsChecked == true)
+            {
+                File.Delete(filename);
+            }
             string extractedPath = System.IO.Path.Combine(path, extractPath);
             Process.Start(extractedPath);
+            StartPos();
+            if (cbAutoClose.IsChecked == true)
+            {
+                this.Close();
+            }
         }
     }
 }

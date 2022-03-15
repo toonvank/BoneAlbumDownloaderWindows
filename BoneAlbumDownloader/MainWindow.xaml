@@ -20,11 +20,15 @@
         <ComboBox x:Name="cmbAlbum" Margin="0,102,0,0" SelectionChanged="cmbAlbum_SelectionChanged" Grid.Row="2" Height="22" VerticalAlignment="Top" HorizontalAlignment="Center" Width="153" HorizontalContentAlignment="Center"/>
         <Label x:Name="downloading" Content="select an album" HorizontalAlignment="Center" Margin="0,236,0,0" Foreground="White" Visibility="Visible" Grid.Row="2" Background="Black" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
         <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="1" Background="Black" Height="42" Grid.RowSpan="2" Width="0"/>
-        <WrapPanel Grid.RowSpan="2" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,76,0,0">
-            <Button x:Name="btnExplorer" Content="Open in file explorer" HorizontalAlignment="Center" VerticalAlignment="Top" Click="btnExplorer_Click"/>
+        <WrapPanel Grid.RowSpan="2" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,202,0,0">
+            <Button x:Name="btnExplorer" Content="open in file explorer" HorizontalAlignment="Center" VerticalAlignment="Center" Click="btnExplorer_Click" Background="Black" Foreground="White" Padding="5,1,1,1"/>
         </WrapPanel>
         <WrapPanel Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center" Width="233" Height="54">
-            <Label x:Name="lblSongName" Content="NowPlayingSongName" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Width="232" Padding="5,5,5,5" Margin="0,0,0,4"/>
+            <Label x:Name="lblSongName" Content="NowPlayingSongName" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Width="232" Padding="5,5,5,5" Margin="0,0,0,4">
+                <Label.Background>
+                    <SolidColorBrush Color="Black" Opacity="0.5"/>
+                </Label.Background>
+            </Label>
             <Button Content="| |◀️" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click_5" Margin="10,0,10,0" Padding="10,1,10,1" Foreground="White" Background="Black">
                 <Button.Resources>
                     <Style TargetType="Border">
@@ -76,5 +80,10 @@
             <MenuItem x:Name="mnuCopy" Header="CopyDriveLink" Click="copyDrive_Checked" Padding="0,0,0,0" BorderBrush="#FF525252" Foreground="White" Background="Black" Margin="5,0,5,0"/>
             <MenuItem x:Name="mnuchange" Header="ChangeCursor" Click="mnuchange_Click" Padding="0,0,0,0" BorderBrush="#FF525252" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.IsSharedSizeScope="True" Background="Black" Foreground="White" Margin="5,0,5,0"/>
         </WrapPanel>
+        <StackPanel x:Name="stckExplorerOptions" Grid.Row="2" Margin="182,297,182,126" Background="Black">
+            <CheckBox x:Name="cbAutoExtract" Content="AutoExtractRar" Foreground="White" Background="White" HorizontalAlignment="Center" IsChecked="True"/>
+            <CheckBox x:Name="cbAutoDelete" Content="AutoDeleteRar" Foreground="White" Background="White" HorizontalAlignment="Center" IsChecked="True"/>
+            <CheckBox x:Name="cbAutoClose" Content="AutoCloseProgram" Foreground="White" Background="White" HorizontalAlignment="Center"/>
+        </StackPanel>
     </Grid>
 </Window>
