@@ -334,7 +334,11 @@ namespace BoneAlbumDownloader
             stckExplorerOptions.Visibility = Visibility.Hidden;
             btnExplorer.Visibility = Visibility.Hidden;
         }
-
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                this.DragMove();
+        }
         private void Button_Click_6(object sender, RoutedEventArgs e)
         {
             if (this.WindowState == WindowState.Maximized)
