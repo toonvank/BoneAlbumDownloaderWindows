@@ -98,9 +98,10 @@ namespace BoneAlbumDownloader
             lblSongName.Visibility = Visibility.Hidden;
             btnExplorer.Visibility = Visibility.Hidden;
             stckExplorerOptions.Visibility = Visibility.Hidden;
+            lstAlbums.Visibility = Visibility.Visible;
             for (int i = 0; i < 48; i++)
             {
-                cmbAlbum.Items.Add(albums[i, 0]);
+                lstAlbums.Items.Add(albums[i, 0]);
             }
 			//player = new SoundPlayer(System.IO.Path.Combine(Environment.CurrentDirectory, @"Music\", "song1.wav"));
 			//player.LoadCompleted += delegate (object sender, AsyncCompletedEventArgs e) {
@@ -111,12 +112,12 @@ namespace BoneAlbumDownloader
         private void StartPos()
         {
             backgroundImage.Source = new BitmapImage(new Uri($@"/Cover/bg.jpg", UriKind.Relative));
-            cmbAlbum.SelectedIndex = -1;
             prgProgress.Visibility = Visibility.Hidden;
-            lblSongName.Visibility = Visibility.Hidden;
             btnExplorer.Visibility = Visibility.Hidden;
             stckExplorerOptions.Visibility = Visibility.Hidden;
+            lstAlbums.Visibility = Visibility.Visible;
             downloading.Content = "select an album";
+            downloading.Margin = new Thickness(0, 218, 0, 0);
         }
 
         private void DownloadDone()
@@ -125,8 +126,6 @@ namespace BoneAlbumDownloader
             cmbAlbum.Visibility = Visibility.Hidden;
             prgProgress.Visibility = Visibility.Hidden;
             btnExplorer.Visibility = Visibility.Visible;
-
-            cmbAlbum.Visibility = Visibility.Visible;
             downloading.Content = $"Download completed to \n{filename}";
         }
 		private void IsDone(string download, string albumnaam)
@@ -143,8 +142,9 @@ namespace BoneAlbumDownloader
 			// Process save file dialog box results
 			if (result == true)
 			{
-
+                downloading.Margin = new Thickness(0, 127, 0, 0);
                 cmbAlbum.Visibility = Visibility.Hidden;
+                lstAlbums.Visibility = Visibility.Hidden;
                 // Save document
                 filename = dialog.FileName;
 				Download.FileDownloader fileDownloader = new Download.FileDownloader();
@@ -302,6 +302,25 @@ namespace BoneAlbumDownloader
             //    throw;
             //}
 
+        }
+
+        private void lstAlbums_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int i = lstAlbums.SelectedIndex;
+            for (int j = 0; j < 48; j++)
+            {
+                if (j == i)
+                {
+                    string image = albums[j, 2];
+                    string link = albums[j, 3];
+                    album = albums[j, 0];
+                    year = albums[j, 1];
+                    backgroundImage.Source = new BitmapImage(new Uri($@"{image}", UriKind.Relative));
+                    IsDone(link, album);
+                }
+            }
+            stckExplorerOptions.Visibility = Visibility.Hidden;
+            btnExplorer.Visibility = Visibility.Hidden;
         }
 
         private void cmbAlbum_SelectionChanged(object sender, SelectionChangedEventArgs e)
