@@ -26,8 +26,8 @@
         <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="1" Background="Black" Height="42" Grid.RowSpan="2" Width="0"/>
         <ProgressBar x:Name="prgProgress" HorizontalAlignment="Center" Height="32" Margin="0,204,0,0" VerticalAlignment="Top" Width="384" Grid.Row="2"/>
         <WrapPanel Grid.RowSpan="2" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,202,0,0"/>
-        <WrapPanel Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center" Width="233" Height="54">
-            <Label x:Name="lblSongName" Content="NowPlayingSongName" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Width="232" Padding="5,5,5,5" Margin="0,0,0,4" FontFamily="Consolas">
+        <WrapPanel Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center" Width="181" Height="54">
+            <Label x:Name="lblSongName" Content="NowPlayingSongName" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Width="232" Padding="5,5,5,5" Margin="0,0,0,4">
                 <Label.Background>
                     <SolidColorBrush Color="Black" Opacity="0.2"/>
                 </Label.Background>
@@ -39,14 +39,14 @@
                     </Style>
                 </Button.Resources>
             </Button>
-            <Button Content="▶︎" HorizontalAlignment="Left" VerticalAlignment="Center" Click="Button_Click" VerticalContentAlignment="Center" Margin="10,0,10,0" Padding="10,1,10,1" Background="Black" Foreground="White">
+            <Button x:Name="play" Content="▶︎" HorizontalAlignment="Left" VerticalAlignment="Center" Click="Button_Click" VerticalContentAlignment="Center" Margin="10,0,10,0" Padding="10,1,10,1" Background="Black" Foreground="White">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="5"/>
                     </Style>
                 </Button.Resources>
             </Button>
-            <Button Content="⬛" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click_1" Margin="10,0,10,0" Padding="10,1,10,1" Foreground="White" Background="Black">
+            <Button Content="⬛" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click_1" Margin="10,0,10,0" Padding="10,1,10,1" Foreground="White" Background="Black" Visibility="Collapsed">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="5"/>
@@ -60,21 +60,22 @@
                     </Style>
                 </Button.Resources>
             </Button>
-            <Button Content="▶︎| |" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click_2" Padding="10,1,10,1" Foreground="White" Background="Black">
-                <Button.Resources>
-                    <Style TargetType="{x:Type Border}">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
-            </Button>
         </WrapPanel>
+
         <ListBox x:Name="lstAlbums" Grid.Row="2" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,270,0,0" SelectionChanged="lstAlbums_SelectionChanged" Foreground="White" HorizontalContentAlignment="Center" BorderBrush="{x:Null}" FontSize="35" FontFamily="Consolas">
             <ListBox.Background>
                 <SolidColorBrush Color="Black" Opacity="0.2"/>
             </ListBox.Background>
         </ListBox>
-        <WrapPanel VerticalAlignment="Top" Margin="0,35,10,0" Orientation="Vertical" Grid.Row="3" Height="20" HorizontalAlignment="Right" Width="89">
+        <WrapPanel VerticalAlignment="Top" Margin="0,35,10,0" Orientation="Vertical" Grid.Row="3" Height="20" HorizontalAlignment="Right" Width="144">
             <Button Content="_" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click_4" Margin="10,0,10,0" Padding="10,1,10,1" Foreground="White" Background="Black">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="5"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
+            <Button x:Name="max" Content="🗖" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click_6" Margin="10,0,10,0" Padding="10,1,10,1" Foreground="White" Background="Black">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="5"/>
@@ -115,12 +116,12 @@
                     <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
                 </CheckBox.LayoutTransform>
             </CheckBox>
-            <CheckBox x:Name="cbAutoDelete" Content="AUTODELETE" Foreground="White" Background="White" HorizontalAlignment="Center" IsChecked="True" Margin="0,0,0,10" FontFamily="Consolas">
+            <CheckBox x:Name="cbAutoDelete" Content="AUTODELETE" Foreground="White" Background="White" HorizontalAlignment="Center" IsChecked="True" Margin="0,0,0,10" FontFamily="Consolas" HorizontalContentAlignment="Center">
                 <CheckBox.LayoutTransform>
                     <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
                 </CheckBox.LayoutTransform>
             </CheckBox>
-            <CheckBox x:Name="cbAutoClose" Content="AUTOCLOSEPROGRAM" Foreground="White" Background="White" HorizontalAlignment="Center" FontFamily="Consolas">
+            <CheckBox x:Name="cbAutoClose" Content="AUTOCLOSEPROGRAM" Foreground="White" Background="White" HorizontalAlignment="Center" FontFamily="Consolas" HorizontalContentAlignment="Left" VerticalContentAlignment="Center">
                 <CheckBox.LayoutTransform>
                     <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
                 </CheckBox.LayoutTransform>

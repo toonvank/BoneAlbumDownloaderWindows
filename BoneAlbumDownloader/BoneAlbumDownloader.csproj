@@ -354,6 +354,9 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Music\sesh.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Music\song10.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -26,6 +26,7 @@ using SharpCompress.Archives.Rar;
 using SharpCompress.Common;
 using SharpCompress.Archives;
 using System.Threading;
+using System.Windows.Threading;
 
 namespace BoneAlbumDownloader
 {
@@ -103,12 +104,18 @@ namespace BoneAlbumDownloader
             {
                 lstAlbums.Items.Add(albums[i, 0]);
             }
-			//player = new SoundPlayer(System.IO.Path.Combine(Environment.CurrentDirectory, @"Music\", "song1.wav"));
-			//player.LoadCompleted += delegate (object sender, AsyncCompletedEventArgs e) {
-			//	player.Play();
-			//};
-			//player.LoadAsync();
-		}
+            PlaySeshSound();
+            //player = new SoundPlayer(System.IO.Path.Combine(Environment.CurrentDirectory, @"Music\", "song1.wav"));
+            //player.LoadCompleted += delegate (object sender, AsyncCompletedEventArgs e) {
+            //	player.Play();
+            //};
+            //player.LoadAsync();
+        }
+        private void PlaySeshSound()
+        {
+            Sesh sesh = new Sesh();
+            sesh.Play();
+        }
         private void StartPos()
         {
             backgroundImage.Source = new BitmapImage(new Uri($@"/Cover/bg.jpg", UriKind.Relative));
@@ -127,6 +134,7 @@ namespace BoneAlbumDownloader
             prgProgress.Visibility = Visibility.Hidden;
             btnExplorer.Visibility = Visibility.Visible;
             downloading.Content = $"Download completed to \n{filename}";
+            PlaySeshSound();
         }
 		private void IsDone(string download, string albumnaam)
         {
@@ -195,29 +203,33 @@ namespace BoneAlbumDownloader
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            player.Start();
-            CurrentSong();
-            lblSongName.Visibility = Visibility.Visible;
-            //         if (ispressed == false)
-            //         {
-            //	player.Play();
-            //}
-            //         else
-            //         {
-            //	player2.Play();
-            //}
+            
+            if (Convert.ToString(play.Content) == "▶︎")
+            {
+                player.Start();
+                CurrentSong();
+                lblSongName.Visibility = Visibility.Visible;
+                play.Content = "⬛";
+            }
+            else
+            {
+                play.Content = "▶︎";
+                player.Stop();
+                lblSongName.Visibility = Visibility.Hidden;
+            }
         }
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
+            PlaySeshSound();
+            Thread.Sleep(600);
             this.Close();
 		}
 
         private void Button_Click_4(object sender, RoutedEventArgs e)
         {
 			this.WindowState = WindowState.Minimized;
-
-		}
+        }
 
         private void mnuchange_Click(object sender, RoutedEventArgs e)
         {
@@ -321,6 +333,21 @@ namespace BoneAlbumDownloader
             }
             stckExplorerOptions.Visibility = Visibility.Hidden;
             btnExplorer.Visibility = Visibility.Hidden;
+        }
+
+        private void Button_Click_6(object sender, RoutedEventArgs e)
+        {
+            if (this.WindowState == WindowState.Maximized)
+            {
+                this.WindowState = WindowState.Normal;
+                max.Content = "🗖";
+            }
+            else if (this.WindowState == WindowState.Normal)
+            {
+                this.WindowState = WindowState.Maximized;
+                max.Content = "🗗";
+            }
+
         }
 
         private void cmbAlbum_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -390,7 +390,10 @@ namespace BoneAlbumDownloader
 		}
         public void Start()
         {
-			sex[i,0].Play();
+			Random rnd = new Random();
+			int random = Convert.ToInt32(rnd.Next(0, sex.Length));
+			sex[random, 0].Play();
+			i = random;
         }
 		public void Previous()
 		{
@@ -408,7 +411,6 @@ namespace BoneAlbumDownloader
 		}
 		public void Next()
 		{
-			
             if (i == sex.Length-1)
             {
 
@@ -426,5 +428,13 @@ namespace BoneAlbumDownloader
 			sex[i, 0].Stop();
 		}
 	}
-
+	internal class Sesh
+    {
+		//plays sesh sound effect
+		public void Play()
+        {
+			SoundPlayer sesh =  new SoundPlayer(Path.Combine(Environment.CurrentDirectory, @"Music\", "sesh.wav"));
+			sesh.Play();
+		}
+    }
 }
