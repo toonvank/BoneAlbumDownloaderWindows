@@ -2,7 +2,7 @@
 
 **How to use:**
 
-1. Download Release.zip 
+1. Download Release.zip from releases on the right bar
 2. Extract zip file
 3. Open BoneAlbumDownloader.exe
 4. Select album from list
