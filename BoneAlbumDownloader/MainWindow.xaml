@@ -9,7 +9,8 @@
         WindowStyle="None"
         AllowsTransparency="True"
         ResizeMode="CanResizeWithGrip"
-        Title="BoneLoader" Height="591" Width="575" Icon="Pics/cursor.ico">
+        WindowStartupLocation="CenterScreen"
+        Title="BoneLoader" Height="591" Width="575" Icon="Pics/cursor.ico" Loaded="Window_Loaded" MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <Grid>
 
         <Grid.RowDefinitions>

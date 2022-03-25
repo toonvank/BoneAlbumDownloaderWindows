@@ -393,8 +393,18 @@ namespace BoneAlbumDownloader
         {
 			Random rnd = new Random();
 			int random = Convert.ToInt32(rnd.Next(0, sex.Length));
-			sex[random, 0].Play();
-			i = random;
+			if (random == songNames.Length && random == songNames.Length-1 && random == songNames.Length-2)
+			{
+				int random2 = Convert.ToInt32(rnd.Next(0, sex.Length));
+				sex[random2, 0].Play();
+				i = random2;
+			}
+            else
+            {
+				sex[random, 0].Play();
+				i = random;
+			}
+			
 		}
 		public void Previous()
 		{

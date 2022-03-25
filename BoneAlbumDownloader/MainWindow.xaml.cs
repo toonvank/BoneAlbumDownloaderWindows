@@ -13,13 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Net;
-using System.Text;
-using Microsoft.Win32;
 using System.Media;
 using System.Diagnostics;
 using SharpCompress.Archives.Rar;
@@ -35,7 +31,7 @@ namespace BoneAlbumDownloader
     /// </summary>
     public partial class MainWindow : Window
     {
-        string album = "empty", filename, year;
+        string album = "empty", filename, year, cursorKeeper;
 		//SoundPlayer player, player2, player3;
         MusicPlayer player = new MusicPlayer();
 		int i = 0;
@@ -94,8 +90,7 @@ namespace BoneAlbumDownloader
 		public MainWindow()
         {
             InitializeComponent();
-			this.Cursor = new Cursor(System.IO.Path.Combine(Environment.CurrentDirectory, @"Pics\", "cursor2.cur"));
-			prgProgress.Visibility = Visibility.Hidden;
+            prgProgress.Visibility = Visibility.Hidden;
             lblSongName.Visibility = Visibility.Hidden;
             btnExplorer.Visibility = Visibility.Hidden;
             stckExplorerOptions.Visibility = Visibility.Hidden;
@@ -140,22 +135,24 @@ namespace BoneAlbumDownloader
         {
 			// Configure save file dialog box
 			var dialog = new Microsoft.Win32.SaveFileDialog();
-			dialog.FileName = albumnaam; // Default file name
+            dialog.InitialDirectory = Properties.Settings.Default.Filename;
+            dialog.FileName = albumnaam; // Default file name
 			dialog.DefaultExt = ".rar"; // Default file extension
 			dialog.Filter = "Rar files (.zip)|*.rar"; // Filter files by extension
 
 			// Show save file dialog box
 			bool? result = dialog.ShowDialog();
-
-			// Process save file dialog box results
-			if (result == true)
+            // Process save file dialog box results
+            if (result == true)
 			{
                 downloading.Margin = new Thickness(0, 127, 0, 0);
                 cmbAlbum.Visibility = Visibility.Hidden;
                 lstAlbums.Visibility = Visibility.Hidden;
                 // Save document
                 filename = dialog.FileName;
-				Download.FileDownloader fileDownloader = new Download.FileDownloader();
+                Properties.Settings.Default.Filename = filename;
+                Properties.Settings.Default.Save();
+                Download.FileDownloader fileDownloader = new Download.FileDownloader();
 				downloading.Visibility = Visibility.Visible;
 				prgProgress.Visibility = Visibility.Visible;
                 if (album != "empty")
@@ -190,7 +187,7 @@ namespace BoneAlbumDownloader
             {
 				MessageBox.Show("Please select an album first");
             }
-		}
+        }
 
         private void copyDrive_Checked(object sender, RoutedEventArgs e)
         {
@@ -217,6 +214,18 @@ namespace BoneAlbumDownloader
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
+            if (this.WindowState == WindowState.Normal)
+            {
+                Properties.Settings.Default.Window = WindowState.Normal;
+                Properties.Settings.Default.Save();
+            }
+            else if (this.WindowState == WindowState.Maximized)
+            {
+                Properties.Settings.Default.Window = WindowState.Maximized;
+                Properties.Settings.Default.Save();
+            }
+            Properties.Settings.Default.Filename = filename;
+            Properties.Settings.Default.Save();
             PlaySeshSound();
             Thread.Sleep(600);
             this.Close();
@@ -229,25 +238,33 @@ namespace BoneAlbumDownloader
 
         private void mnuchange_Click(object sender, RoutedEventArgs e)
         {
+            
 			string cursor = Microsoft.VisualBasic.Interaction.InputBox($"Answers: seshcrown[w]hite, seshcrown[b]lack, [e]ddy, [s]tandard\nPlease enter the highlighted letter.", "File directory input");
-			if (cursor == "w" || cursor == "seshcrownwhite")
+            if (cursor == "w" || cursor == "seshcrownwhite")
             {
 				this.Cursor = new Cursor(System.IO.Path.Combine(Environment.CurrentDirectory, @"Pics\", "sesh1.cur"));
-			}
+                cursorKeeper = "sesh1.cur";
+
+            }
 			if (cursor == "b" || cursor == "seshcrownblack")
 			{
 				this.Cursor = new Cursor(System.IO.Path.Combine(Environment.CurrentDirectory, @"Pics\", "sesh2.cur"));
-			}
+                cursorKeeper = "sesh2.cur";
+            }
 			else if (cursor == "e" || cursor == "eddy")
 			{
 				this.Cursor = new Cursor(System.IO.Path.Combine(Environment.CurrentDirectory, @"Pics\", "ed.cur"));
+                cursorKeeper = "ed.cur";
 
-			}
+            }
 			else if (cursor == "s" || cursor == "standard")
 			{
 				this.Cursor = new Cursor(System.IO.Path.Combine(Environment.CurrentDirectory, @"Pics\", "cursor2.cur"));
-			}
-		}
+                cursorKeeper = "cursor2.cur";
+            }
+            Properties.Settings.Default.Cursor = cursorKeeper;
+            Properties.Settings.Default.Save();
+        }
         private void CurrentSong()
         {
             lblSongName.Content = player.CurrentSong;
@@ -339,7 +356,7 @@ namespace BoneAlbumDownloader
         {
             if (this.WindowState == WindowState.Maximized)
             {
-                this.WindowState = WindowState.Normal;
+                WindowState = WindowState.Normal;
                 max.Content = "🗖";
             }
             else if (this.WindowState == WindowState.Normal)
@@ -353,6 +370,21 @@ namespace BoneAlbumDownloader
         private void btnDownloadAll_Click(object sender, RoutedEventArgs e)
         {
             IsDone("https://drive.google.com/file/d/17-NbQKQUvfYlHZqsz74BEECl0rpgKRvI/view?usp=sharing", "BonesFullDiscog");
+        }
+
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2)
+                WindowState = WindowState == WindowState.Normal ? WindowState.Maximized : WindowState.Normal;
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = Properties.Settings.Default.Window;
+            cursorKeeper = Properties.Settings.Default.Cursor;
+            this.Cursor = new Cursor(System.IO.Path.Combine(Environment.CurrentDirectory, @"Pics\", cursorKeeper));
+            cbAutoExtract.IsChecked = Properties.Settings.Default.Extract;
+            cbAutoDelete.IsChecked = Properties.Settings.Default.Delete;
         }
 
         private void cmbAlbum_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -380,6 +412,8 @@ namespace BoneAlbumDownloader
             string extractPath = string.Empty;
             if (cbAutoExtract.IsChecked == true)
             {
+                Properties.Settings.Default.Extract = true;
+                Properties.Settings.Default.Save();
                 // Read RAR file
                 RarArchive rarArchive = RarArchive.Open(filename);
                 // Extract all data
@@ -402,9 +436,21 @@ namespace BoneAlbumDownloader
                 }
                 rarArchive.Dispose();
             }
+            else if (cbAutoExtract.IsChecked == false)
+            {
+                Properties.Settings.Default.Extract = false;
+                Properties.Settings.Default.Save();
+            }
             if (cbAutoDelete.IsChecked == true)
             {
+                Properties.Settings.Default.Delete = true;
+                Properties.Settings.Default.Save();
                 File.Delete(filename);
+            }
+            else if (cbAutoDelete.IsChecked == false)
+            {
+                Properties.Settings.Default.Delete = false;
+                Properties.Settings.Default.Save();
             }
             string extractedPath = System.IO.Path.Combine(path, extractPath);
             Process.Start(extractedPath);
