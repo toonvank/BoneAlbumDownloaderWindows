@@ -381,6 +381,7 @@ namespace BoneAlbumDownloader
 			{"MisterTenBelow"},
 			{"3M"},
 		};
+
         public string CurrentSong 
 		{
             get
@@ -394,7 +395,7 @@ namespace BoneAlbumDownloader
 			int random = Convert.ToInt32(rnd.Next(0, sex.Length));
 			sex[random, 0].Play();
 			i = random;
-        }
+		}
 		public void Previous()
 		{
             if (i==0)

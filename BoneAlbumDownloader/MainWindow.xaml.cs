@@ -35,7 +35,7 @@ namespace BoneAlbumDownloader
     /// </summary>
     public partial class MainWindow : Window
     {
-        string album, filename, year;
+        string album = "empty", filename, year;
 		//SoundPlayer player, player2, player3;
         MusicPlayer player = new MusicPlayer();
 		int i = 0;
@@ -158,7 +158,14 @@ namespace BoneAlbumDownloader
 				Download.FileDownloader fileDownloader = new Download.FileDownloader();
 				downloading.Visibility = Visibility.Visible;
 				prgProgress.Visibility = Visibility.Visible;
-				downloading.Content = $"Downloading {album} ({year})";
+                if (album != "empty")
+                {
+                    downloading.Content = $"Downloading {album} ({year})";
+                }
+                else
+                {
+                    downloading.Content = $"Downloading Bones Full Discography (10GB)";
+                }
 				//fileDownloader.DownloadProgressChanged += (sender, e) => downloading.Content = "Progress changed " + e.BytesReceived + " " + e.TotalBytesToReceive;
 				fileDownloader.DownloadProgressChanged += (sender, e) => prgProgress.Maximum = e.TotalBytesToReceive;
 				fileDownloader.DownloadProgressChanged += (sender, e) => prgProgress.Value = e.BytesReceived;
@@ -185,16 +192,6 @@ namespace BoneAlbumDownloader
             }
 		}
 
-        private void resetLocation_Click(object sender, RoutedEventArgs e)
-        {
-
-		}
-
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-			MessageBox.Show("Made by @seshwoods. 2021. No copyright intended.");
-        }
-
         private void copyDrive_Checked(object sender, RoutedEventArgs e)
         {
 			Clipboard.SetText("https://drive.google.com/drive/folders/1OsKCRoX7YGaxkzhtHZ4gHI-LjXgzUw-1?usp=sharing");
@@ -203,7 +200,6 @@ namespace BoneAlbumDownloader
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            
             if (Convert.ToString(play.Content) == "▶︎")
             {
                 player.Start();
@@ -352,6 +348,11 @@ namespace BoneAlbumDownloader
                 max.Content = "🗗";
             }
 
+        }
+
+        private void btnDownloadAll_Click(object sender, RoutedEventArgs e)
+        {
+            IsDone("https://drive.google.com/file/d/17-NbQKQUvfYlHZqsz74BEECl0rpgKRvI/view?usp=sharing", "BonesFullDiscog");
         }
 
         private void cmbAlbum_SelectionChanged(object sender, SelectionChangedEventArgs e)

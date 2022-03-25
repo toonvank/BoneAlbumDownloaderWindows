@@ -11,7 +11,7 @@
         ResizeMode="CanResizeWithGrip"
         Title="BoneLoader" Height="591" Width="575" Icon="Pics/cursor.ico">
     <Grid>
-        
+
         <Grid.RowDefinitions>
             <RowDefinition Height="0*"/>
             <RowDefinition Height="38*"/>
@@ -130,6 +130,12 @@
             </CheckBox>
         </StackPanel>
         <Button x:Name="btnExplorer" Content="open in file explorer" HorizontalAlignment="Center" VerticalAlignment="Top" Click="btnExplorer_Click" Foreground="White" Padding="10,10,10,10" Margin="0,344,0,0" Grid.Row="2" FontFamily="Consolas" FontSize="27" BorderBrush="{x:Null}">
+            <Button.Background>
+                <SolidColorBrush Color="#FF0E0A0A" Opacity="0.9"/>
+            </Button.Background>
+        </Button>
+
+        <Button x:Name="btnDownloadAll" Content="download all albums" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Top" Foreground="White" FontFamily="Consolas" Padding="5,5,5,5" Margin="0,28,0,0" Click="btnDownloadAll_Click">
             <Button.Background>
                 <SolidColorBrush Color="#FF0E0A0A" Opacity="0.9"/>
             </Button.Background>
