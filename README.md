@@ -1,13 +1,18 @@
-Easy GUI tool to download any bones album.
-Exe can be found under release.
+### Easy GUI tool to download any bones album (in FLAC format)
 
-How to use:
+**How to use:**
 
-1. Download zip or exe file (first try exe, if you have problems download the release zip).
-2. Extract zip file using any tool you like (if you downloaded the exe this is not necessary)
-2. Open BoneAlbumDownloader.exe
-3. Enter the dropdown menu and select any album you wish to download
-4. The program will ask for your pc username. this is because files are downloaded to C:\Users\USERNAME\Downloads\ (this horrendous method might be patched in update).
-5. Your file will now be stored in rar format. This can be unpacked with any program you like
+1. Download Release.zip from releases on the right bar
+2. Extract zip file
+3. Open BoneAlbumDownloader.exe
+4. Select album from list
+5. Select download location
+6. Options to **auto extract** the rar file, **auto delete** the rar file, **auto close** the program. Selected options will be executed when you press "open in file explorer"
+7. File explorer will auto open and selected actions are executed
 
-If you're having issues with the file location you can set the download location yourself. This can be any folder but DIRECTLY the C:\ drive. If you do this, the program will crash.
+If any other issues send me a DM on instagram @seshwoods this is greatly appreciated
+New features: updated UI, new album picker, auto extract, auto delete and auto close, improved and enhanced music player, bug fixes
+
+Detailed instruction video:
+
+https://user-images.githubusercontent.com/61182641/159976724-32494dfe-e4c0-4c86-891b-35143f1cf1de.mp4
