@@ -12,6 +12,7 @@ using System.Text;
 using Microsoft.Win32;
 using System.Media;
 using System.Windows.Forms;
+using System.Windows.Media;
 
 namespace BoneAlbumDownloader
 {
@@ -349,6 +350,8 @@ namespace BoneAlbumDownloader
 	internal class MusicPlayer
     {
 		int i = 0;
+		MediaPlayer player;
+        
 		private SoundPlayer[,] sex = 
 		{
 			{new SoundPlayer(Path.Combine(Environment.CurrentDirectory, @"Music\", "song1.wav"))},
@@ -391,6 +394,7 @@ namespace BoneAlbumDownloader
 		}
         public void Start()
         {
+
 			Random rnd = new Random();
 			int random = Convert.ToInt32(rnd.Next(0, sex.Length));
 			if (random == songNames.Length && random == songNames.Length-1 && random == songNames.Length-2)
@@ -404,8 +408,8 @@ namespace BoneAlbumDownloader
 				sex[random, 0].Play();
 				i = random;
 			}
-			
-		}
+
+        }
 		public void Previous()
 		{
             if (i==0)

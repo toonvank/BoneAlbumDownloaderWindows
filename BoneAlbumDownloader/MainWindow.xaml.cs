@@ -32,10 +32,11 @@ namespace BoneAlbumDownloader
     public partial class MainWindow : Window
     {
         string album = "empty", filename, year, cursorKeeper, link="empty";
-		//SoundPlayer player, player2, player3;
+        int songCounter = 0;
+        //SoundPlayer player, player2, player3;
         MusicPlayer player = new MusicPlayer();
-		int i = 0;
-
+        MediaPlayer balls = new MediaPlayer();
+        int i = 0;
 		private string[,] albums = { 
         { "BONES", "2012", "/Cover/1.jpg", "https://drive.google.com/uc?export=download&id=11zHwGe5fZZV8rkyRTX023L6FUHKc0k5g&confirm=t"}, 
         { "TYPICALRAPSHIT", "2012", "/Cover/2.jpg", "https://drive.google.com/uc?id=11LIoQ11Mk7jSR-X41Mx2-pXrwrNYixnh&export=download"}, 
@@ -86,8 +87,25 @@ namespace BoneAlbumDownloader
         { "BURDEN", "2021", "/Cover/46.jpg", "https://drive.google.com/uc?id=12C_efxglApaRJ7SzHVg2q33_vsPazfc3&export=download&confirm=t"} ,
         { "SCRAPS", "2021", "/Cover/scraps.jpeg", "https://drive.google.com/uc?id=10g2e6qRDSTklScbV-wExA_E0_gkGZvBK&export=download&confirm=t"} ,
         };
+        private string[,] songs =
+        {
+            {"SystemPreferences","song1.wav"},
+            {"Sodium", "song2.wav"},
+            {"STEVEWIKOSTHROWCHAIR", "song3.wav"},
+            {"HeavyFog", "song4.wav"},
+            {"Lysol", "song5.wav"},
+            {"PileOfFlesh", "song6.wav"},
+            {"HimalayanSalt", "song7.wav"},
+            {"LowerThanLow", "song8.wav"},
+            {"MyNephewHasAWhitePickupTruck", "song9.wav"},
+            {"Baja", "song10.wav"},
+            {"Cumulonimbus", "song11.wav"},
+            {"TheHealingFields", "song12.wav"},
+            {"MisterTenBelow", "song13.wav"},
+            {"3M", "song14.wav"},
+        };
 
-		public MainWindow()
+        public MainWindow()
         {
             InitializeComponent();
             prgProgress.Visibility = Visibility.Hidden;
@@ -121,7 +139,6 @@ namespace BoneAlbumDownloader
             downloading.Content = "select an album";
             downloading.Margin = new Thickness(0, 218, 0, 0);
         }
-
         private void DownloadDone()
         {
             stckExplorerOptions.Visibility = Visibility.Visible;
@@ -194,20 +211,29 @@ namespace BoneAlbumDownloader
 			Clipboard.SetText("https://drive.google.com/drive/folders/1OsKCRoX7YGaxkzhtHZ4gHI-LjXgzUw-1?usp=sharing");
 			MessageBox.Show("Drive link copied.");
 		}
-
+        private void BallPlay(string path)
+        {
+            balls.Open(new Uri(System.IO.Path.Combine(Environment.CurrentDirectory, @"Music\", path)));
+            balls.Play();
+        }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             if (Convert.ToString(play.Content) == "▶︎")
             {
-                player.Start();
+                //player.Start();
                 CurrentSong();
+                string songPath = songs[songCounter, 1];
+                BallPlay(songPath);
                 lblSongName.Visibility = Visibility.Visible;
                 play.Content = "⬛";
+                balls.MediaEnded += (finished, b) => BallNext();
+                balls.MediaEnded += (finished, b) => CurrentSong();
             }
             else
             {
                 play.Content = "▶︎";
-                player.Stop();
+                balls.Stop();
+                //balls.Pause();
                 lblSongName.Visibility = Visibility.Hidden;
             }
         }
@@ -267,11 +293,10 @@ namespace BoneAlbumDownloader
         }
         private void CurrentSong()
         {
-            lblSongName.Content = player.CurrentSong;
+            lblSongName.Content = songs[songCounter, 0];
         }
 		private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            player.Stop();
             lblSongName.Visibility = Visibility.Hidden;
             //if (ispressed == false)
             //{
@@ -285,7 +310,7 @@ namespace BoneAlbumDownloader
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            player.Next();
+            BallNext();
             CurrentSong();
             lblSongName.Visibility = Visibility.Visible;
             //i++;
@@ -305,12 +330,47 @@ namespace BoneAlbumDownloader
             //}
 
         }
+        private void BallPrevious()
+        {
+            play.Content = "⬛";
+            if (songCounter == 0)
+            {
 
+            }
+            else
+            {
+                songCounter--;
+                string songPath = songs[songCounter, 1];
+                balls.Stop();
+                balls.Open(new Uri(System.IO.Path.Combine(Environment.CurrentDirectory, @"Music\", songPath)));
+                balls.Play();
+            }
+        }
+        private void BallNext()
+        {
+            play.Content = "⬛";
+            if (songCounter == (songs.Length/2)-1)
+            {
+
+            }
+            else
+            {
+                songCounter++;
+                string songPath = songs[songCounter, 1];
+                balls.Stop();
+                balls.Open(new Uri(System.IO.Path.Combine(Environment.CurrentDirectory, @"Music\", songPath)));
+                balls.Play();
+            }
+        }
         private void Button_Click_5(object sender, RoutedEventArgs e)
         {
-            player.Previous();
-            CurrentSong();
-            lblSongName.Visibility = Visibility.Visible;
+            //player.Previous();
+            if (songCounter != 0)
+            {
+                CurrentSong();
+                BallPrevious();
+                lblSongName.Visibility = Visibility.Visible;
+            }
             //try
             //{
             //    player2.Stop();
@@ -388,6 +448,8 @@ namespace BoneAlbumDownloader
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            //balls.Open(new Uri($@"C:\Users\Toon Van Kimmenade\Downloads\BoneAlbumDownloader\BoneAlbumDownloader\Music\song1.wav"));
+            balls.Open(new Uri(System.IO.Path.Combine(Environment.CurrentDirectory, @"Music\", "song2.wav")));
             this.WindowState = Properties.Settings.Default.Window;
             cursorKeeper = Properties.Settings.Default.Cursor;
             this.Cursor = new Cursor(System.IO.Path.Combine(Environment.CurrentDirectory, @"Pics\", cursorKeeper));

@@ -26,6 +26,7 @@
                 <SolidColorBrush Color="Black" Opacity="0.49"/>
             </Label.Background>
         </Label>
+
         <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="1" Background="Black" Height="42" Grid.RowSpan="2" Width="0"/>
         <ProgressBar x:Name="prgProgress" HorizontalAlignment="Center" Height="32" Margin="0,204,0,0" VerticalAlignment="Top" Width="384" Grid.Row="2"/>
         <WrapPanel Grid.RowSpan="2" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,202,0,0"/>
