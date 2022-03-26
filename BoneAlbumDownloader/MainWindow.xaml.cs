@@ -31,7 +31,7 @@ namespace BoneAlbumDownloader
     /// </summary>
     public partial class MainWindow : Window
     {
-        string album = "empty", filename, year, cursorKeeper;
+        string album = "empty", filename, year, cursorKeeper, link="empty";
 		//SoundPlayer player, player2, player3;
         MusicPlayer player = new MusicPlayer();
 		int i = 0;
@@ -178,14 +178,14 @@ namespace BoneAlbumDownloader
 
         private void clickClip_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if (link != "empty")
             {
-				Clipboard.SetText(album);
-				MessageBox.Show("Latest link succesfully copied.");
-			}
-            catch (Exception)
+                Clipboard.SetText(link);
+                MessageBox.Show("Latest link succesfully copied.");
+            }
+            else
             {
-				MessageBox.Show("Please select an album first");
+                MessageBox.Show("No link to copy");
             }
         }
 
@@ -364,7 +364,6 @@ namespace BoneAlbumDownloader
                 this.WindowState = WindowState.Maximized;
                 max.Content = "🗗";
             }
-
         }
 
         private void btnDownloadAll_Click(object sender, RoutedEventArgs e)
@@ -395,7 +394,7 @@ namespace BoneAlbumDownloader
                 if (j == i)
                 {
                     string image = albums[j, 2];
-                    string link = albums[j, 3];
+                    link = albums[j, 3];
 					album = albums[j, 0];
 					year = albums[j, 1];
 					backgroundImage.Source = new BitmapImage(new Uri($@"{image}", UriKind.Relative));
