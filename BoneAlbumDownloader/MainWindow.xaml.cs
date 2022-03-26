@@ -375,6 +375,15 @@ namespace BoneAlbumDownloader
         {
             if (e.ClickCount == 2)
                 WindowState = WindowState == WindowState.Normal ? WindowState.Maximized : WindowState.Normal;
+            if (this.WindowState == WindowState.Maximized)
+            {
+                max.Content = "🗗";
+            }
+            else if (this.WindowState == WindowState.Normal)
+            {
+                max.Content = "🗖";
+                
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
