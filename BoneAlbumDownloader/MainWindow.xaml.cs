@@ -33,6 +33,7 @@ namespace BoneAlbumDownloader
     {
         string album = "empty", filename, year, cursorKeeper, link="empty";
         int songCounter = 0;
+        bool isFinished = false;
         //SoundPlayer player, player2, player3;
         MusicPlayer player = new MusicPlayer();
         MediaPlayer balls = new MediaPlayer();
@@ -148,7 +149,21 @@ namespace BoneAlbumDownloader
             downloading.Content = $"Download completed to \n{filename}";
             PlaySeshSound();
         }
-		private void IsDone(string download, string albumnaam)
+        private void Playing()
+        {
+            Thread.Sleep(300);
+            slMedia.Maximum = balls.NaturalDuration.TimeSpan.TotalSeconds;
+            DispatcherTimer wekker = new DispatcherTimer();
+            wekker.Tick += new EventHandler(DispatcherTimer_Tick);
+            wekker.Interval = new TimeSpan(0, 0, 1);
+            wekker.Start();
+
+        }
+        private void DispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            slMedia.Value = balls.Position.TotalSeconds;
+        }
+        private void IsDone(string download, string albumnaam)
         {
 			// Configure save file dialog box
 			var dialog = new Microsoft.Win32.SaveFileDialog();
@@ -226,8 +241,11 @@ namespace BoneAlbumDownloader
                 BallPlay(songPath);
                 lblSongName.Visibility = Visibility.Visible;
                 play.Content = "⬛";
+                Playing();
                 balls.MediaEnded += (finished, b) => BallNext();
                 balls.MediaEnded += (finished, b) => CurrentSong();
+                balls.MediaEnded += (finished, b) => isFinished = true;
+                
             }
             else
             {
@@ -251,6 +269,7 @@ namespace BoneAlbumDownloader
                 Properties.Settings.Default.Save();
             }
             Properties.Settings.Default.Filename = filename;
+            Properties.Settings.Default.Volume = slVolume.Value;
             Properties.Settings.Default.Save();
             PlaySeshSound();
             Thread.Sleep(600);
@@ -367,8 +386,8 @@ namespace BoneAlbumDownloader
             //player.Previous();
             if (songCounter != 0)
             {
-                CurrentSong();
                 BallPrevious();
+                CurrentSong();
                 lblSongName.Visibility = Visibility.Visible;
             }
             //try
@@ -412,50 +431,6 @@ namespace BoneAlbumDownloader
             if (e.ChangedButton == MouseButton.Left)
                 this.DragMove();
         }
-        private void Button_Click_6(object sender, RoutedEventArgs e)
-        {
-            if (this.WindowState == WindowState.Maximized)
-            {
-                WindowState = WindowState.Normal;
-                max.Content = "🗖";
-            }
-            else if (this.WindowState == WindowState.Normal)
-            {
-                this.WindowState = WindowState.Maximized;
-                max.Content = "🗗";
-            }
-        }
-
-        private void btnDownloadAll_Click(object sender, RoutedEventArgs e)
-        {
-            IsDone("https://drive.google.com/file/d/17-NbQKQUvfYlHZqsz74BEECl0rpgKRvI/view?usp=sharing", "BonesFullDiscog");
-        }
-
-        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ClickCount == 2)
-                WindowState = WindowState == WindowState.Normal ? WindowState.Maximized : WindowState.Normal;
-            if (this.WindowState == WindowState.Maximized)
-            {
-                max.Content = "🗗";
-            }
-            else if (this.WindowState == WindowState.Normal)
-            {
-                max.Content = "🗖";
-                
-            }
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            //balls.Open(new Uri($@"C:\Users\Toon Van Kimmenade\Downloads\BoneAlbumDownloader\BoneAlbumDownloader\Music\song1.wav"));
-            balls.Open(new Uri(System.IO.Path.Combine(Environment.CurrentDirectory, @"Music\", "song2.wav")));
-            this.WindowState = Properties.Settings.Default.Window;
-            cursorKeeper = Properties.Settings.Default.Cursor;
-            this.Cursor = new Cursor(System.IO.Path.Combine(Environment.CurrentDirectory, @"Pics\", cursorKeeper));
-            cbAutoExtract.IsChecked = Properties.Settings.Default.Extract;
-            cbAutoDelete.IsChecked = Properties.Settings.Default.Delete;
-        }
 
         private void cmbAlbum_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -466,9 +441,9 @@ namespace BoneAlbumDownloader
                 {
                     string image = albums[j, 2];
                     link = albums[j, 3];
-					album = albums[j, 0];
-					year = albums[j, 1];
-					backgroundImage.Source = new BitmapImage(new Uri($@"{image}", UriKind.Relative));
+                    album = albums[j, 0];
+                    year = albums[j, 1];
+                    backgroundImage.Source = new BitmapImage(new Uri($@"{image}", UriKind.Relative));
                     IsDone(link, album);
                 }
             }
@@ -529,6 +504,85 @@ namespace BoneAlbumDownloader
             {
                 this.Close();
             }
+        }
+
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2)
+                WindowState = WindowState == WindowState.Normal ? WindowState.Maximized : WindowState.Normal;
+            if (this.WindowState == WindowState.Maximized)
+            {
+                max.Content = "🗗";
+            }
+            else if (this.WindowState == WindowState.Normal)
+            {
+                max.Content = "🗖";
+
+            }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            //balls.Open(new Uri($@"C:\Users\Toon Van Kimmenade\Downloads\BoneAlbumDownloader\BoneAlbumDownloader\Music\song1.wav"));
+            balls.Open(new Uri(System.IO.Path.Combine(Environment.CurrentDirectory, @"Music\", "song2.wav")));
+            this.WindowState = Properties.Settings.Default.Window;
+            cursorKeeper = Properties.Settings.Default.Cursor;
+            this.Cursor = new Cursor(System.IO.Path.Combine(Environment.CurrentDirectory, @"Pics\", cursorKeeper));
+            cbAutoExtract.IsChecked = Properties.Settings.Default.Extract;
+            cbAutoDelete.IsChecked = Properties.Settings.Default.Delete;
+        }
+
+        private void slMedia_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            
+        }
+
+        private void slMedia_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Released)
+            {
+                balls.ScrubbingEnabled = true;
+                TimeSpan sliderPos = new TimeSpan(0, 0, 0, (int)slMedia.Value);
+                balls.Position += sliderPos;
+            }
+        }
+
+        private void Button_Click_6(object sender, RoutedEventArgs e)
+        {
+            if (this.WindowState == WindowState.Maximized)
+            {
+                WindowState = WindowState.Normal;
+                max.Content = "🗖";
+            }
+            else if (this.WindowState == WindowState.Normal)
+            {
+                this.WindowState = WindowState.Maximized;
+                max.Content = "🗗";
+            }
+        }
+
+        private void btnDownloadAll_Click(object sender, RoutedEventArgs e)
+        {
+            IsDone("https://drive.google.com/file/d/17-NbQKQUvfYlHZqsz74BEECl0rpgKRvI/view?usp=sharing", "BonesFullDiscog");
+        }
+
+        private void slVolume_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (Properties.Settings.Default.Volume != 0)
+            {
+                balls.Volume = Properties.Settings.Default.Volume;
+            }
+            else
+            {
+                balls.Volume = Properties.Settings.Default.Volume +0.4;
+            }
+            
+            slVolume.Value = balls.Volume;
+        }
+
+        private void slVolume_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            balls.Volume = slVolume.Value;
         }
     }
 }
