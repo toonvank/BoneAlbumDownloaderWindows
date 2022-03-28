@@ -1,0 +1,77 @@
+﻿<Window x:Class="BoneAlbumDownloader.Settings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BoneAlbumDownloader"
+        mc:Ignorable="d"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        ResizeMode="CanResizeWithGrip"
+        WindowStartupLocation="CenterScreen"
+        Title="Settings" Height="450" Width="506" Icon="Pics/cursor.ico" MouseDown="Window_MouseDown" Loaded="Window_Loaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="17*"/>
+            <RowDefinition Height="208*"/>
+        </Grid.RowDefinitions>
+        <TabControl TabStripPlacement="Left" Grid.Row="1">
+            <TabItem FontFamily="Consolas" Header="General" Height="27" Margin="-2,0,1,0" Width="83">
+                <Grid Background="#FFE5E5E5">
+                    <StackPanel>
+                        <CheckBox x:Name="chkAudio" Content="Disable sesh audio effect" Margin="10,10,10,0"/>
+                        <Button Content="Import settings from previous version" Margin="10,10,143,0" Click="Button_Click_1"/>
+                        <Button x:Name="genSave" Content="Save" Margin="0,0,20,0" Padding="5,5,5,5" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="genSave_Click"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem FontFamily="Consolas" Header="Download" Height="27" Margin="-2,0,1,0">
+                <Grid Background="#FFE5E5E5">
+                    <StackPanel>
+                        <CheckBox x:Name="chkAutoOpen" Content="Auto open folder after downloading" Margin="10,10,10,0"/>
+                        <Button x:Name="dlSave" Content="Save" Margin="0,0,20,0" Padding="5,5,5,5" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="dlSave_Click"/>
+
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem FontFamily="Consolas" Header="Music" Height="27" Margin="-2,0,1,0">
+                <Grid Background="#FFE5E5E5">
+                    <StackPanel>
+                        <CheckBox x:Name="chkOnStartup" Content="Play music on startup" Margin="10,10,10,0"/>
+                        <CheckBox x:Name="chkShuffle" Content="Shuffle music" Margin="10,10,10,0"/>
+                        <TextBlock TextWrapping="Wrap" Margin="12,10,10,0" Text="Shuffle is still experimental"/>
+                        <Button x:Name="musicSave" Content="Save" Margin="0,0,20,0" Padding="5,5,5,5" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="musicSave_Click"/>
+
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem FontFamily="Consolas" Header="About" Height="27" Margin="-2,0,1,0">
+                <Grid Background="#FFE5E5E5">
+                    <StackPanel>
+                        <Label Content="BoneAlbumDownloader 2022" Margin="10,10,10,0" FontSize="24"/>
+                        <TextBlock TextWrapping="Wrap" Margin="16,10,10,0" Text="Easy to use GUI album downloader.
+                                   Idea and programming by seshwoods
+                                   No copyright intended in any way!"/>
+                        <Label Content="Tools used for development" Margin="10,10,10,0" FontSize="18"/>
+                        <TextBlock TextWrapping="Wrap" Margin="12,10,10,0" Text="-FileDownloader.cs made by yasirkula
+                                   -Google drive sesh discography
+                                   -SharpCompress adamhathcock"/>
+                        <Button x:Name="btnFiled" Content="Github Filedownloader" Click="Button_Click" Margin="12,21,173,0" Padding="5,5,5,5" ScrollViewer.CanContentScroll="True"/>
+                        <Button x:Name="btnDrive" Content="Drive Discography" Click="btnDrive_Click" Margin="12,12,173,0" Padding="5,5,5,5"/>
+                        <Button x:Name="btnLinks" Content="Seshwoods links" Margin="12,12,173,0" Padding="5,5,5,5" Click="btnLinks_Click"/>
+                        <Button x:Name="btnCoffee" Content="Buy me a coffee" Margin="12,12,173,0" Padding="5,5,5,5" Click="btnCoffee_Click"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <Label x:Name="lblSettings" Content="SETTINGS" FontFamily="Consolas" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Center" FontSize="20"/>
+        <Button x:Name="btnClose" Content="X" HorizontalAlignment="Right" VerticalAlignment="Center" Click="Button_Click_3" VerticalContentAlignment="Center" Margin="0,0,9,0" Padding="10,1,10,1" Background="Black" Foreground="White" Width="34">
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+
+    </Grid>
+</Window>

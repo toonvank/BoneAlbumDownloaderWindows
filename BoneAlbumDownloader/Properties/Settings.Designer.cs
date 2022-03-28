@@ -106,5 +106,65 @@ namespace BoneAlbumDownloader.Properties {
                 this["Volume"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AudioEffect {
+            get {
+                return ((bool)(this["AudioEffect"]));
+            }
+            set {
+                this["AudioEffect"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool MaxOnDouble {
+            get {
+                return ((bool)(this["MaxOnDouble"]));
+            }
+            set {
+                this["MaxOnDouble"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoOpenAfterDownload {
+            get {
+                return ((bool)(this["AutoOpenAfterDownload"]));
+            }
+            set {
+                this["AutoOpenAfterDownload"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool MusicOnStartup {
+            get {
+                return ((bool)(this["MusicOnStartup"]));
+            }
+            set {
+                this["MusicOnStartup"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShuffleMusic {
+            get {
+                return ((bool)(this["ShuffleMusic"]));
+            }
+            set {
+                this["ShuffleMusic"] = value;
+            }
+        }
     }
 }

@@ -16,8 +16,8 @@ using System.Windows.Media;
 
 namespace BoneAlbumDownloader
 {
-    internal class Download
-    {
+	internal class Download
+	{
 		/* EXAMPLE USAGE
 		FileDownloader fileDownloader = new FileDownloader();
 		// This callback is triggered for DownloadFileAsync only
@@ -348,11 +348,11 @@ namespace BoneAlbumDownloader
 		}
 	}
 	internal class MusicPlayer
-    {
+	{
 		int i = 0;
 		MediaPlayer player;
-        
-		private SoundPlayer[,] sex = 
+
+		private SoundPlayer[,] sex =
 		{
 			{new SoundPlayer(Path.Combine(Environment.CurrentDirectory, @"Music\", "song1.wav"))},
 			{new SoundPlayer(Path.Combine(Environment.CurrentDirectory, @"Music\", "song2.wav"))},
@@ -385,71 +385,107 @@ namespace BoneAlbumDownloader
 			{"3M"},
 		};
 
-        public string CurrentSong 
+		public string CurrentSong
 		{
-            get
-            {
-				return songNames[i,0];
-            }
+			get
+			{
+				return songNames[i, 0];
+			}
 		}
-        public void Start()
-        {
+		public void Start()
+		{
 
 			Random rnd = new Random();
 			int random = Convert.ToInt32(rnd.Next(0, sex.Length));
-			if (random == songNames.Length && random == songNames.Length-1 && random == songNames.Length-2)
+			if (random == songNames.Length && random == songNames.Length - 1 && random == songNames.Length - 2)
 			{
 				int random2 = Convert.ToInt32(rnd.Next(0, sex.Length));
 				sex[random2, 0].Play();
 				i = random2;
 			}
-            else
-            {
+			else
+			{
 				sex[random, 0].Play();
 				i = random;
 			}
 
-        }
+		}
 		public void Previous()
 		{
-            if (i==0)
-            {
+			if (i == 0)
+			{
 
-            }
-            else
-            {
+			}
+			else
+			{
 				sex[i, 0].Stop();
 				i--;
 				sex[i, 0].Play();
 			}
-			
+
 		}
 		public void Next()
 		{
-            if (i == sex.Length-1)
-            {
+			if (i == sex.Length - 1)
+			{
 
-            }
-            else
-            {
+			}
+			else
+			{
 				sex[i, 0].Stop();
 				i++;
 				sex[i, 0].Play();
 			}
 		}
-		
+
 		public void Stop()
-        {
+		{
 			sex[i, 0].Stop();
 		}
 	}
 	internal class Sesh
-    {
+	{
 		//plays sesh sound effect
 		public void Play()
-        {
-			SoundPlayer sesh =  new SoundPlayer(Path.Combine(Environment.CurrentDirectory, @"Music\", "sesh.wav"));
+		{
+			SoundPlayer sesh = new SoundPlayer(Path.Combine(Environment.CurrentDirectory, @"Music\", "sesh.wav"));
 			sesh.Play();
+		}
+	}
+	internal class Links
+    {
+		public void openLink(string target)
+		{
+			try
+			{
+				System.Diagnostics.Process.Start(target);
+			}
+			catch (System.ComponentModel.Win32Exception noBrowser)
+			{
+				if (noBrowser.ErrorCode == -2147467259)
+					MessageBox.Show(noBrowser.Message);
+			}
+			catch (System.Exception other)
+			{
+				MessageBox.Show(other.Message);
+			}
+		}
+	}
+	internal class Setting
+    {
+		//General
+        public bool AudioEffect { get; set; }
+		//Download
+        public bool AutoOpenAfterDownload { get; set; }
+		//Music
+		public bool MusicOnStartup { get; set; }
+        public bool ShuffleMusic { get; set; }
+		public void LoadSettings()
+        {
+			AudioEffect = Properties.Settings.Default.AudioEffect;
+			AutoOpenAfterDownload = Properties.Settings.Default.AutoOpenAfterDownload;
+			MusicOnStartup = Properties.Settings.Default.MusicOnStartup;
+			ShuffleMusic = Properties.Settings.Default.ShuffleMusic;
 		}
     }
 }

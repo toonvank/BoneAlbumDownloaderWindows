@@ -378,28 +378,36 @@
                 <SolidColorBrush Color="Black" Opacity="0.2"/>
             </ListBox.Background>
         </ListBox>
-        <WrapPanel VerticalAlignment="Top" Margin="0,35,10,0" Orientation="Vertical" Grid.Row="3" Height="20" HorizontalAlignment="Right" Width="144">
-            <Button Content="_" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click_4" Margin="10,0,10,0" Padding="10,1,10,1" Foreground="White" Background="Black">
+        <WrapPanel VerticalAlignment="Top" Margin="0,35,18,0" Orientation="Vertical" Grid.Row="3" Height="20" HorizontalAlignment="Right">
+            <Button x:Name="btnSettings" Content="⚙️" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10,1,10,1" Foreground="White" Background="Black" Margin="8,0,16,0" Width="37" Click="btnSettings_Click">
+                <Button.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius" Value="5"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
+            <Button Content="_" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click_4" Margin="8,0,0,0" Padding="10,1,10,1" Foreground="White" Background="Black" Width="34">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="5"/>
                     </Style>
                 </Button.Resources>
             </Button>
-            <Button x:Name="max" Content="🗖" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click_6" Margin="10,0,10,0" Padding="10,1,10,1" Foreground="White" Background="Black">
+            <Button x:Name="max" Content="🗖" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click_6" Margin="8,0,0,0" Padding="10,1,10,1" Foreground="White" Background="Black" Width="34">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="5"/>
                     </Style>
                 </Button.Resources>
             </Button>
-            <Button Content="X" HorizontalAlignment="Left" VerticalAlignment="Center" Click="Button_Click_3" VerticalContentAlignment="Center" Margin="13,0,10,0" Padding="10,1,10,1" Background="Black" Foreground="White">
+            <Button Content="X" HorizontalAlignment="Left" VerticalAlignment="Center" Click="Button_Click_3" VerticalContentAlignment="Center" Margin="8,0,0,0" Padding="10,1,10,1" Background="Black" Foreground="White" Width="34">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="5"/>
                     </Style>
                 </Button.Resources>
             </Button>
+
         </WrapPanel>
         <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Height="22" Width="517">
             <MenuItem x:Name="mnuClick" Header="CopyLatestLink" IsCheckable="True" Click="clickClip_Click" Padding="0,0,0,0" BorderBrush="{x:Null}" HorizontalContentAlignment="Left" Foreground="White" Margin="5,0,5,0">
@@ -413,6 +421,11 @@
                 </MenuItem.Background>
             </MenuItem>
             <MenuItem x:Name="mnuchange" Header="ChangeCursor" Click="mnuchange_Click" Padding="0,0,0,0" BorderBrush="{x:Null}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.IsSharedSizeScope="True" Foreground="White" Margin="5,0,5,0">
+                <MenuItem.Background>
+                    <SolidColorBrush Color="Black" Opacity="0.2"/>
+                </MenuItem.Background>
+            </MenuItem>
+            <MenuItem x:Name="mnuCopy_Copy" Header="CopyDriveLink" Click="copyDrive_Checked" Padding="0,0,0,0" BorderBrush="{x:Null}" Foreground="White">
                 <MenuItem.Background>
                     <SolidColorBrush Color="Black" Opacity="0.2"/>
                 </MenuItem.Background>
@@ -444,7 +457,7 @@
             </Button.Background>
         </Button>
 
-        <Button x:Name="btnDownloadAll" Content="download all albums" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Foreground="White" FontFamily="Consolas" Padding="5,5,5,5" Margin="0,24,0,0" Click="btnDownloadAll_Click" Height="23">
+        <Button x:Name="btnDownloadAll" Content="download all albums" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Foreground="White" FontFamily="Consolas" Padding="5,5,5,5" Margin="0,24,0,0" Click="btnDownloadAll_Click">
             <Button.Background>
                 <SolidColorBrush Color="#FF0E0A0A" Opacity="0.9"/>
             </Button.Background>
@@ -454,7 +467,7 @@
                 </Style>
             </Button.Resources>
         </Button>
-        <Slider x:Name="slVolume" HorizontalAlignment="Left" Margin="181,0,0,0" Grid.Row="3" VerticalAlignment="Center" Orientation="Vertical" Maximum="1" Loaded="slVolume_Loaded" ValueChanged="slVolume_ValueChanged" Height="52" Foreground="{x:Null}" BorderBrush="{x:Null}" Background="{x:Null}" Style="{DynamicResource SliderStyle2}" Template="{DynamicResource SliderVertical}"/>
+        <Slider x:Name="slVolume" HorizontalAlignment="Left" Margin="170,0,0,0" Grid.Row="3" VerticalAlignment="Center" Orientation="Vertical" Maximum="1" Loaded="slVolume_Loaded" ValueChanged="slVolume_ValueChanged" Height="52" Foreground="{x:Null}" BorderBrush="{x:Null}" Background="{x:Null}" Style="{DynamicResource SliderStyle2}" Template="{DynamicResource SliderVertical}" Panel.ZIndex="12"/>
         <Slider Style="{DynamicResource SliderStyle2}" x:Name="slMedia" HorizontalAlignment="Left" Margin="29,0,0,0" Grid.Row="3" VerticalAlignment="Center" Width="120" Height="16" PreviewMouseMove="slMedia_PreviewMouseMove" PreviewMouseUp="slMedia_PreviewMouseUp"/>
     </Grid>
 </Window>

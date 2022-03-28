@@ -37,6 +37,8 @@ namespace BoneAlbumDownloader
         //SoundPlayer player, player2, player3;
         MusicPlayer player = new MusicPlayer();
         MediaPlayer balls = new MediaPlayer();
+        Links openLink = new Links();
+        Setting sc = new Setting();
         int i = 0;
 		private string[,] albums = { 
         { "BONES", "2012", "/Cover/1.jpg", "https://drive.google.com/uc?export=download&id=11zHwGe5fZZV8rkyRTX023L6FUHKc0k5g&confirm=t"}, 
@@ -118,7 +120,7 @@ namespace BoneAlbumDownloader
             {
                 lstAlbums.Items.Add(albums[i, 0]);
             }
-            PlaySeshSound();
+            
             //player = new SoundPlayer(System.IO.Path.Combine(Environment.CurrentDirectory, @"Music\", "song1.wav"));
             //player.LoadCompleted += delegate (object sender, AsyncCompletedEventArgs e) {
             //	player.Play();
@@ -127,8 +129,11 @@ namespace BoneAlbumDownloader
         }
         private void PlaySeshSound()
         {
-            Sesh sesh = new Sesh();
-            sesh.Play();
+            if (sc.AudioEffect != true)
+            {
+                Sesh sesh = new Sesh();
+                sesh.Play();
+            }
         }
         private void StartPos()
         {
@@ -200,7 +205,12 @@ namespace BoneAlbumDownloader
 				fileDownloader.DownloadProgressChanged += (sender, e) => prgProgress.Value = e.BytesReceived;
 				fileDownloader.DownloadFileCompleted += (sender, b) => downloading.Content = $"Download completed to \n{filename}";
 				fileDownloader.DownloadFileCompleted += (sender, b) => DownloadDone();
-				fileDownloader.DownloadFileAsync($"{download}", filename);
+                sc.LoadSettings();
+                if (sc.AutoOpenAfterDownload == true)
+                {
+                    fileDownloader.DownloadFileCompleted += (sender, b) => Explorer();
+                }
+                fileDownloader.DownloadFileAsync($"{download}", filename);
 			}
             else
             {
@@ -223,9 +233,8 @@ namespace BoneAlbumDownloader
 
         private void copyDrive_Checked(object sender, RoutedEventArgs e)
         {
-			Clipboard.SetText("https://drive.google.com/drive/folders/1OsKCRoX7YGaxkzhtHZ4gHI-LjXgzUw-1?usp=sharing");
-			MessageBox.Show("Drive link copied.");
-		}
+            openLink.openLink("https://drive.google.com/drive/folders/1OsKCRoX7YGaxkzhtHZ4gHI-LjXgzUw-1?usp=sharing");
+        }
         private void BallPlay(string path)
         {
             balls.Open(new Uri(System.IO.Path.Combine(Environment.CurrentDirectory, @"Music\", path)));
@@ -236,8 +245,22 @@ namespace BoneAlbumDownloader
             if (Convert.ToString(play.Content) == "▶︎")
             {
                 //player.Start();
+                
+                string songPath;
+                sc.LoadSettings();
+                if (sc.ShuffleMusic == true)
+                {
+                    Random rnd = new Random();
+                    int _rnd = rnd.Next(songs.Length);
+                    songPath = songs[_rnd/2, 1];
+                    songCounter = _rnd/2;
+                }
+                else
+                {
+                    songCounter++;
+                    songPath = songs[songCounter, 1];
+                }
                 CurrentSong();
-                string songPath = songs[songCounter, 1];
                 BallPlay(songPath);
                 lblSongName.Visibility = Visibility.Visible;
                 play.Content = "⬛";
@@ -374,8 +397,19 @@ namespace BoneAlbumDownloader
             }
             else
             {
-                songCounter++;
-                string songPath = songs[songCounter, 1];
+                string songPath;
+                if (sc.ShuffleMusic == true)
+                {
+                    Random rnd = new Random();
+                    int _rnd = rnd.Next(songs.Length);
+                    songPath = songs[_rnd/2, 1];
+                    songCounter = _rnd / 2;
+                }
+                else
+                {
+                    songCounter++;
+                    songPath = songs[songCounter, 1];
+                }
                 balls.Stop();
                 balls.Open(new Uri(System.IO.Path.Combine(Environment.CurrentDirectory, @"Music\", songPath)));
                 balls.Play();
@@ -451,7 +485,7 @@ namespace BoneAlbumDownloader
             btnExplorer.Visibility = Visibility.Hidden;
         }
 
-        private void btnExplorer_Click(object sender, RoutedEventArgs e)
+        private void Explorer()
         {
             string path = filename.Replace($"{album}.rar", "");
             string extractPath = string.Empty;
@@ -505,11 +539,18 @@ namespace BoneAlbumDownloader
                 this.Close();
             }
         }
+        private void btnExplorer_Click(object sender, RoutedEventArgs e)
+        {
+            Explorer();
+        }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ClickCount == 2)
+            {
                 WindowState = WindowState == WindowState.Normal ? WindowState.Maximized : WindowState.Normal;
+            }
+                
             if (this.WindowState == WindowState.Maximized)
             {
                 max.Content = "🗗";
@@ -517,7 +558,6 @@ namespace BoneAlbumDownloader
             else if (this.WindowState == WindowState.Normal)
             {
                 max.Content = "🗖";
-
             }
         }
 
@@ -530,6 +570,12 @@ namespace BoneAlbumDownloader
             this.Cursor = new Cursor(System.IO.Path.Combine(Environment.CurrentDirectory, @"Pics\", cursorKeeper));
             cbAutoExtract.IsChecked = Properties.Settings.Default.Extract;
             cbAutoDelete.IsChecked = Properties.Settings.Default.Delete;
+            sc.LoadSettings();
+            PlaySeshSound();
+            if (sc.MusicOnStartup == false)
+            {
+                BallNext();
+            }
         }
 
         private void slMedia_PreviewMouseMove(object sender, MouseEventArgs e)
@@ -545,6 +591,12 @@ namespace BoneAlbumDownloader
                 TimeSpan sliderPos = new TimeSpan(0, 0, 0, (int)slMedia.Value);
                 balls.Position += sliderPos;
             }
+        }
+
+        private void btnSettings_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new Settings();
+            window.Show();
         }
 
         private void Button_Click_6(object sender, RoutedEventArgs e)
