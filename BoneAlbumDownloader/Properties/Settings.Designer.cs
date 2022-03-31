@@ -25,7 +25,7 @@ namespace BoneAlbumDownloader.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Not Set")]
+        [global::System.Configuration.DefaultSettingValueAttribute("sesh1.cur")]
         public string Cursor {
             get {
                 return ((string)(this["Cursor"]));
@@ -109,7 +109,7 @@ namespace BoneAlbumDownloader.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool AudioEffect {
             get {
                 return ((bool)(this["AudioEffect"]));
@@ -145,7 +145,7 @@ namespace BoneAlbumDownloader.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool MusicOnStartup {
             get {
                 return ((bool)(this["MusicOnStartup"]));

@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="Cursor" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Not Set</Value>
+      <Value Profile="(Default)">sesh1.cur</Value>
     </Setting>
     <Setting Name="Filename" Type="System.String" Scope="User">
       <Value Profile="(Default)">Not Set</Value>
@@ -24,7 +24,7 @@
       <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="AudioEffect" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="MaxOnDouble" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -33,7 +33,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="MusicOnStartup" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="ShuffleMusic" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
