@@ -34,6 +34,7 @@ namespace BoneAlbumDownloader
         string album = "empty", filename, year, cursorKeeper, link="empty";
         int songCounter = 0;
         bool isFinished = false;
+        int songArrayCounter = 15;
         //SoundPlayer player, player2, player3;
         MusicPlayer player = new MusicPlayer();
         MediaPlayer balls = new MediaPlayer();
@@ -106,6 +107,12 @@ namespace BoneAlbumDownloader
             {"TheHealingFields", "song12.wav"},
             {"MisterTenBelow", "song13.wav"},
             {"3M", "song14.wav"},
+            {"EmptySongSlot", "song15.mp3"},
+            {"EmptySongSlot", "song16.mp3"},
+            {"EmptySongSlot", "song17.mp3"},
+            {"EmptySongSlot", "song18.mp3"},
+            {"EmptySongSlot", "song19.mp3"},
+            {"EmptySongSlot", "song20.mp3"},
         };
 
         public MainWindow()
@@ -599,6 +606,29 @@ namespace BoneAlbumDownloader
             window.Show();
         }
 
+        private void addSongs_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog
+            {
+                Filter = "mp3 (*.mp3*)|*.mp3*",
+                FileName = "punten.txt",
+                Multiselect = true,
+                InitialDirectory = Properties.Settings.Default.Filename
+            };
+            if (ofd.ShowDialog() == true)
+            {
+                string sourcePath = ofd.FileName;
+                string destinPath = Convert.ToString(new Uri(System.IO.Path.Combine(Environment.CurrentDirectory, @"Music\")));
+                string filename = ofd.SafeFileName;
+                string file = filename.ToString();
+                string songname = $"song{songArrayCounter}.mp3";
+                string destFile = System.IO.Path.Combine(destinPath, songname);
+                destFile = destFile.Replace("/", "\\"); 
+                destFile = destFile.Remove(0,8); 
+                File.Copy(sourcePath, destFile, true);
+                songArrayCounter++;
+             }
+        }
         private void Button_Click_6(object sender, RoutedEventArgs e)
         {
             if (this.WindowState == WindowState.Maximized)
