@@ -90,6 +90,7 @@ namespace BoneAlbumDownloader
         { "INLOVINGMEMORY", "2021", "/Cover/45.jpg", "https://drive.google.com/uc?id=1-ncB6j_07q3W_OzTAjqImnSF3H6aOaEl&export=download&confirm=t"} ,
         { "BURDEN", "2021", "/Cover/46.jpg", "https://drive.google.com/uc?id=12C_efxglApaRJ7SzHVg2q33_vsPazfc3&export=download&confirm=t"} ,
         { "SCRAPS", "2021", "/Cover/scraps.jpeg", "https://drive.google.com/uc?id=10g2e6qRDSTklScbV-wExA_E0_gkGZvBK&export=download&confirm=t"} ,
+	{ "WITHERED", "2022", "/Cover/withered.jpeg", "https://drive.google.com/uc?id=187jMPLC9STdpByYjDXHKdf7CXXUoLcOY&export=download&confirm=t"} ,
         };
         private string[,] songs =
         {
