@@ -1,3 +1,4 @@
+Does not work currently! The google drive discog can't be used as a source anymore due to a change in google drive.
 ### Easy GUI tool to download any bones album (in FLAC format)
 
 **How to use:**
